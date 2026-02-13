@@ -6,20 +6,23 @@ const line2 = "STUDIOS";
 <section
   id="massive-studios"
   class="relative py-32 md:py-40 lg:py-48 overflow-hidden"
+  data-velocity-skew
 >
   {/* Terracotta Red Background */}
   <div class="absolute inset-0 -z-30" style="background-color: #b73a3a;"></div>
 
-  {/* Film Grain Layer 1 - Fine noise like the image */}
+  {/* Animated Film Grain Layer 1 */}
   <div
-    class="absolute inset-0 opacity-[0.18] pointer-events-none -z-20"
+    id="grain-1"
+    class="absolute inset-0 opacity-[0.18] pointer-events-none -z-20 grain-layer"
     style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 256 256%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22g%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3CfeColorMatrix type=%22saturate%22 values=%220%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23g)%22/%3E%3C/svg%3E'); background-size: 256px 256px;"
   >
   </div>
 
-  {/* Film Grain Layer 2 - Different frequency for depth */}
+  {/* Animated Film Grain Layer 2 */}
   <div
-    class="absolute inset-0 opacity-[0.12] pointer-events-none -z-20"
+    id="grain-2"
+    class="absolute inset-0 opacity-[0.12] pointer-events-none -z-20 grain-layer"
     style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22g2%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%221.4%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3CfeColorMatrix type=%22saturate%22 values=%220%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23g2)%22/%3E%3C/svg%3E'); background-size: 200px 200px;"
   >
   </div>
@@ -62,16 +65,18 @@ const line2 = "STUDIOS";
       </span>
     </div>
 
-    {/* Giant Title - Centered */}
+    {/* Giant Title - Centered with parallax */}
     <div class="text-center mb-20 md:mb-28 relative">
       <h2
         class="massive-title text-black uppercase leading-[0.75] relative"
+        data-parallax="title"
         style="font-size: clamp(8rem, 28vw, 24rem); font-family: 'Bokis', serif; font-weight: 400; letter-spacing: -0.02em;"
       >
         {line1}
       </h2>
       <h3
         class="massive-subtitle text-black uppercase leading-[0.75] -mt-4 md:-mt-8 relative"
+        data-parallax="subtitle"
         style="font-size: clamp(1.5rem, 5vw, 4rem); font-family: 'Bokis', serif; font-weight: 400; letter-spacing: -0.02em;"
       >
         {line2}
@@ -191,5 +196,64 @@ const line2 = "STUDIOS";
       },
       "-=0.4",
     );
+    
+    // Parallax effect on scroll
+    const title = section.querySelector('[data-parallax="title"]');
+    const subtitle = section.querySelector('[data-parallax="subtitle"]');
+    
+    if (title) {
+      gsap.to(title, {
+        y: -50,
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1,
+        },
+      });
+    }
+    
+    if (subtitle) {
+      gsap.to(subtitle, {
+        y: -30,
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1,
+        },
+      });
+    }
+    
+    // Animate grain layers for film effect
+    const grain1 = document.getElementById("grain-1");
+    const grain2 = document.getElementById("grain-2");
+    
+    if (grain1 && grain2) {
+      // Subtle position shift on scroll
+      gsap.to(grain1, {
+        backgroundPosition: "100px 100px",
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 2,
+        },
+      });
+      
+      gsap.to(grain2, {
+        backgroundPosition: "-50px -50px",
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1.5,
+        },
+      });
+    }
   }
 </script>

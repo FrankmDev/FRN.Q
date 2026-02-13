@@ -1,0 +1,98 @@
+---
+/**
+ * VelocitySkew - Global velocity-based skew effect
+ * Applies subtle skew transformation based on scroll velocity
+ */
+---
+
+<script is:inline>
+  (function initVelocitySkew() {
+    // Wait for GSAP
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+      setTimeout(initVelocitySkew, 50);
+      return;
+    }
+    
+    gsap.registerPlugin(ScrollTrigger);
+    
+    // Configuration
+    const config = {
+      maxSkew: 1.5,
+      smoothing: 0.08,
+      targetSelector: '[data-velocity-skew]'
+    };
+    
+    let lastScrollY = window.scrollY;
+    let velocity = 0;
+    let currentSkew = 0;
+    let rafId = null;
+    let isActive = true;
+    
+    const lerp = (a, b, t) => a + (b - a) * t;
+    
+    // Get all target elements
+    let targetElements = [];
+    
+    const updateTargets = () => {
+      targetElements = document.querySelectorAll(config.targetSelector);
+    };
+    
+    // Update function
+    const update = () => {
+      if (!isActive) return;
+      
+      const scrollY = window.scrollY;
+      const rawVelocity = scrollY - lastScrollY;
+      velocity = lerp(velocity, rawVelocity, config.smoothing);
+      lastScrollY = scrollY;
+      
+      // Calculate target skew based on velocity
+      const targetSkew = Math.max(-config.maxSkew, Math.min(config.maxSkew, velocity * 0.02));
+      currentSkew = lerp(currentSkew, targetSkew, config.smoothing);
+      
+      // Apply to all target elements
+      if (targetElements.length > 0) {
+        const transform = `skewY(${currentSkew}deg)`;
+        targetElements.forEach(el => {
+          el.style.transform = transform;
+        });
+      }
+      
+      rafId = requestAnimationFrame(update);
+    };
+    
+    // Initialize
+    updateTargets();
+    update();
+    
+    // Update targets on page load
+    document.addEventListener('DOMContentLoaded', updateTargets);
+    
+    // Update targets on Astro page transitions
+    document.addEventListener('astro:page-load', updateTargets);
+    
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+      isActive = false;
+      if (rafId) cancelAnimationFrame(rafId);
+    });
+    
+    console.log('[VelocitySkew] Initialized');
+  })();
+</script>
+
+<style is:global>
+  /* Elements that respond to velocity skew */
+  [data-velocity-skew] {
+    will-change: transform;
+    transition: none;
+    transform-origin: center center;
+  }
+  
+  /* Subtle skew for large text elements */
+  h1[data-velocity-skew],
+  h2[data-velocity-skew],
+  .massive-title[data-velocity-skew] {
+    transform-origin: center center;
+  }
+</style>

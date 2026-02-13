@@ -1,0 +1,491 @@
+---
+/**
+ * AnimationUtils - Reusable GSAP utilities for brutalist but smooth effects
+ * Includes: Magnetic effect, Text scramble, Velocity skew, Smooth spring physics
+ */
+---
+
+<script is:inline>
+  // ============================================
+  // GLOBAL ANIMATION UTILITIES
+  // ============================================
+  
+  window.AnimationUtils = window.AnimationUtils || {};
+  
+  // Store active animations for cleanup
+  const activeAnimations = new Set();
+  
+  // ============================================
+  // 1. MAGNETIC EFFECT
+  // ============================================
+  window.AnimationUtils.initMagnetic = function(selector, options = {}) {
+    const {
+      strength = 0.4,
+      radius = 100,
+      ease = 0.15,
+      onEnter = null,
+      onLeave = null
+    } = options;
+    
+    const elements = document.querySelectorAll(selector);
+    
+    elements.forEach(el => {
+      let rafId = null;
+      let targetX = 0, targetY = 0;
+      let currentX = 0, currentY = 0;
+      let isHovering = false;
+      
+      const lerp = (a, b, t) => a + (b - a) * t;
+      
+      const animate = () => {
+        currentX = lerp(currentX, targetX, ease);
+        currentY = lerp(currentY, targetY, ease);
+        
+        el.style.transform = `translate(${currentX}px, ${currentY}px)`;
+        
+        if (isHovering || Math.abs(currentX) > 0.01 || Math.abs(currentY) > 0.01) {
+          rafId = requestAnimationFrame(animate);
+        }
+      };
+      
+      el.addEventListener('mouseenter', (e) => {
+        isHovering = true;
+        if (onEnter) onEnter(el);
+        if (!rafId) animate();
+      });
+      
+      el.addEventListener('mousemove', (e) => {
+        const rect = el.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        
+        const distanceX = e.clientX - centerX;
+        const distanceY = e.clientY - centerY;
+        const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+        
+        if (distance < radius) {
+          const factor = (1 - distance / radius) * strength;
+          targetX = distanceX * factor;
+          targetY = distanceY * factor;
+        }
+      });
+      
+      el.addEventListener('mouseleave', () => {
+        isHovering = false;
+        targetX = 0;
+        targetY = 0;
+        if (onLeave) onLeave(el);
+      });
+    });
+  };
+  
+  // ============================================
+  // 2. TEXT SCRAMBLE EFFECT
+  // ============================================
+  window.AnimationUtils.initTextScramble = function(selector, options = {}) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const elements = document.querySelectorAll(selector);
+    
+    elements.forEach(el => {
+      const originalText = el.textContent;
+      let frame = 0;
+      let queue = [];
+      let isAnimating = false;
+      
+      const setText = (newText) => {
+        const length = Math.max(originalText.length, newText.length);
+        const promise = new Promise(resolve => {
+          queue = [];
+          for (let i = 0; i < length; i++) {
+            const from = originalText[i] || '';
+            const to = newText[i] || '';
+            const start = Math.floor(Math.random() * 20);
+            const end = start + Math.floor(Math.random() * 20);
+            queue.push({ from, to, start, end });
+          }
+          
+          const update = () => {
+            let output = '';
+            let complete = 0;
+            
+            for (let i = 0; i < queue.length; i++) {
+              let { from, to, start, end } = queue[i];
+              let char = from;
+              
+              if (frame >= end) {
+                complete++;
+                char = to;
+              } else if (frame >= start) {
+                if (!char || Math.random() < 0.28) {
+                  char = chars[Math.floor(Math.random() * chars.length)];
+                }
+              }
+              
+              output += char;
+            }
+            
+            el.textContent = output;
+            
+            if (complete === queue.length) {
+              resolve();
+              isAnimating = false;
+            } else {
+              frame++;
+              requestAnimationFrame(update);
+            }
+          };
+          
+          frame = 0;
+          isAnimating = true;
+          update();
+        });
+        
+        return promise;
+      };
+      
+      el.addEventListener('mouseenter', () => {
+        if (!isAnimating) {
+          setText(originalText);
+        }
+      });
+    });
+  };
+  
+  // ============================================
+  // 3. VELOCITY-BASED SKEW EFFECT
+  // ============================================
+  window.AnimationUtils.initVelocitySkew = function(options = {}) {
+    const {
+      maxSkew = 3,
+      smoothing = 0.1,
+      targetSelector = '[data-velocity-skew]'
+    } = options;
+    
+    let lastScrollY = window.scrollY;
+    let velocity = 0;
+    let currentSkew = 0;
+    let rafId = null;
+    let lastTime = Date.now();
+    
+    const lerp = (a, b, t) => a + (b - a) * t;
+    
+    const update = () => {
+      const now = Date.now();
+      const dt = Math.max(now - lastTime, 1);
+      lastTime = now;
+      
+      const scrollY = window.scrollY;
+      const newVelocity = (scrollY - lastScrollY) / dt * 10;
+      velocity = lerp(velocity, newVelocity, smoothing);
+      lastScrollY = scrollY;
+      
+      const targetSkew = Math.max(-maxSkew, Math.min(maxSkew, velocity * 0.5));
+      currentSkew = lerp(currentSkew, targetSkew, smoothing);
+      
+      const elements = document.querySelectorAll(targetSelector);
+      elements.forEach(el => {
+        el.style.transform = `skewY(${currentSkew}deg)`;
+      });
+      
+      rafId = requestAnimationFrame(update);
+    };
+    
+    update();
+    
+    // Cleanup function
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  };
+  
+  // ============================================
+  // 4. SMOOTH REVEAL WITH MASK
+  // ============================================
+  window.AnimationUtils.initMaskReveal = function(selector, options = {}) {
+    const {
+      direction = 'up', // up, down, left, right
+      duration = 0.8,
+      stagger = 0.1,
+      ease = 'power3.out',
+      start = 'top 85%'
+    } = options;
+    
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+      setTimeout(() => window.AnimationUtils.initMaskReveal(selector, options), 100);
+      return;
+    }
+    
+    const elements = document.querySelectorAll(selector);
+    
+    elements.forEach((el, index) => {
+      // Create mask wrapper
+      const wrapper = document.createElement('div');
+      wrapper.style.overflow = 'hidden';
+      wrapper.style.position = 'relative';
+      el.parentNode.insertBefore(wrapper, el);
+      wrapper.appendChild(el);
+      
+      // Set initial state based on direction
+      const fromVars = { duration, ease, delay: index * stagger };
+      
+      switch(direction) {
+        case 'up':
+          gsap.set(el, { y: '100%' });
+          fromVars.y = '0%';
+          break;
+        case 'down':
+          gsap.set(el, { y: '-100%' });
+          fromVars.y = '0%';
+          break;
+        case 'left':
+          gsap.set(el, { x: '100%' });
+          fromVars.x = '0%';
+          break;
+        case 'right':
+          gsap.set(el, { x: '-100%' });
+          fromVars.x = '0%';
+          break;
+      }
+      
+      ScrollTrigger.create({
+        trigger: wrapper,
+        start,
+        onEnter: () => gsap.to(el, fromVars),
+        once: true
+      });
+    });
+  };
+  
+  // ============================================
+  // 5. BREATHING/PULSE EFFECT
+  // ============================================
+  window.AnimationUtils.initBreathing = function(selector, options = {}) {
+    const {
+      minScale = 0.98,
+      maxScale = 1.02,
+      duration = 3,
+      ease = 'sine.inOut'
+    } = options;
+    
+    if (typeof gsap === 'undefined') {
+      setTimeout(() => window.AnimationUtils.initBreathing(selector, options), 100);
+      return;
+    }
+    
+    const elements = document.querySelectorAll(selector);
+    
+    elements.forEach((el, i) => {
+      gsap.to(el, {
+        scale: maxScale,
+        duration: duration,
+        ease,
+        yoyo: true,
+        repeat: -1,
+        delay: i * 0.5
+      });
+    });
+  };
+  
+  // ============================================
+  // 6. PARALLAX LAYERS
+  // ============================================
+  window.AnimationUtils.initParallax = function(selector, options = {}) {
+    const {
+      speed = 0.5,
+      direction = 'vertical' // vertical, horizontal
+    } = options;
+    
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+      setTimeout(() => window.AnimationUtils.initParallax(selector, options), 100);
+      return;
+    }
+    
+    const elements = document.querySelectorAll(selector);
+    
+    elements.forEach(el => {
+      const elementSpeed = el.dataset.parallaxSpeed || speed;
+      
+      gsap.to(el, {
+        [direction === 'vertical' ? 'y' : 'x']: () => elementSpeed * 100,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true
+        }
+      });
+    });
+  };
+  
+  // ============================================
+  // 7. STAGGERED ENTRANCE
+  // ============================================
+  window.AnimationUtils.initStaggerEntrance = function(selector, options = {}) {
+    const {
+      from = { y: 60, opacity: 0 },
+      to = { y: 0, opacity: 1 },
+      duration = 0.8,
+      stagger = 0.1,
+      ease = 'power3.out',
+      start = 'top 85%'
+    } = options;
+    
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+      setTimeout(() => window.AnimationUtils.initStaggerEntrance(selector, options), 100);
+      return;
+    }
+    
+    const elements = document.querySelectorAll(selector);
+    
+    gsap.fromTo(elements, from, {
+      ...to,
+      duration,
+      stagger,
+      ease,
+      scrollTrigger: {
+        trigger: elements[0],
+        start,
+        toggleActions: 'play none none reverse'
+      }
+    });
+  };
+  
+  // ============================================
+  // 8. LINE DRAW ANIMATION
+  // ============================================
+  window.AnimationUtils.initLineDraw = function(selector, options = {}) {
+    const {
+      duration = 1,
+      ease = 'power2.inOut',
+      start = 'top 85%',
+      direction = 'horizontal' // horizontal, vertical
+    } = options;
+    
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+      setTimeout(() => window.AnimationUtils.initLineDraw(selector, options), 100);
+      return;
+    }
+    
+    const elements = document.querySelectorAll(selector);
+    
+    elements.forEach(el => {
+      const prop = direction === 'horizontal' ? 'scaleX' : 'scaleY';
+      gsap.set(el, { [prop]: 0, transformOrigin: 'left center' });
+      
+      gsap.to(el, {
+        [prop]: 1,
+        duration,
+        ease,
+        scrollTrigger: {
+          trigger: el,
+          start,
+          toggleActions: 'play none none reverse'
+        }
+      });
+    });
+  };
+  
+  // ============================================
+  // 9. HOVER LIFT EFFECT
+  // ============================================
+  window.AnimationUtils.initHoverLift = function(selector, options = {}) {
+    const {
+      lift = -8,
+      shadow = true,
+      duration = 0.3
+    } = options;
+    
+    const elements = document.querySelectorAll(selector);
+    
+    elements.forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        if (typeof gsap !== 'undefined') {
+          gsap.to(el, {
+            y: lift,
+            boxShadow: shadow ? '0 20px 40px rgba(0,0,0,0.15)' : 'none',
+            duration,
+            ease: 'power2.out'
+          });
+        }
+      });
+      
+      el.addEventListener('mouseleave', () => {
+        if (typeof gsap !== 'undefined') {
+          gsap.to(el, {
+            y: 0,
+            boxShadow: 'none',
+            duration,
+            ease: 'power2.out'
+          });
+        }
+      });
+    });
+  };
+  
+  // ============================================
+  // 10. ROTATING BADGE/MARQUEE
+  // ============================================
+  window.AnimationUtils.initRotatingBadge = function(selector, options = {}) {
+    const {
+      speed = 10,
+      direction = 1 // 1 = clockwise, -1 = counter-clockwise
+    } = options;
+    
+    if (typeof gsap === 'undefined') {
+      setTimeout(() => window.AnimationUtils.initRotatingBadge(selector, options), 100);
+      return;
+    }
+    
+    const elements = document.querySelectorAll(selector);
+    
+    elements.forEach(el => {
+      gsap.to(el, {
+        rotation: 360 * direction,
+        duration: speed,
+        ease: 'none',
+        repeat: -1,
+        transformOrigin: 'center center'
+      });
+    });
+  };
+  
+  console.log('[AnimationUtils] Loaded successfully');
+</script>
+
+<style is:global>
+  /* Utility classes for animations */
+  [data-magnetic] {
+    display: inline-block;
+    will-change: transform;
+  }
+  
+  [data-velocity-skew] {
+    will-change: transform;
+    transition: none;
+  }
+  
+  [data-parallax] {
+    will-change: transform;
+  }
+  
+  [data-hover-lift] {
+    will-change: transform, box-shadow;
+  }
+  
+  /* Text scramble hover effect */
+  [data-text-scramble] {
+    font-family: monospace;
+  }
+  
+  /* Mask reveal container */
+  .mask-reveal-wrapper {
+    overflow: hidden;
+    position: relative;
+  }
+  
+  /* Smooth spring animation class */
+  .spring-transition {
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+</style>

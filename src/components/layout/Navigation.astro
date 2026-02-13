@@ -37,10 +37,11 @@ const logoLetters = siteConfig.name.split("");
           <a
             href={item.path}
             data-cursor={item.cursor}
-            class={`nav-link group relative font-mono text-sm lg:text-base tracking-[0.3em] uppercase font-black transition-colors duration-200 ${
+            class={`nav-link nav-link-magnetic group relative font-mono text-sm lg:text-base tracking-[0.3em] uppercase font-black transition-colors duration-200 ${
               currentPath === item.path ? "text-accent" : "text-foreground"
             }`}
             data-index={i}
+            data-magnetic
           >
             <span class="relative z-10">{item.label}</span>
 
@@ -295,6 +296,15 @@ const logoLetters = siteConfig.name.split("");
     }
 
     console.log("[Navigation] Animations initialized");
+    
+    // Initialize magnetic effect on nav links
+    if (window.AnimationUtils && window.AnimationUtils.initMagnetic) {
+      window.AnimationUtils.initMagnetic('.nav-link-magnetic', {
+        strength: 0.3,
+        radius: 50,
+        ease: 0.15
+      });
+    }
   }
 
   // Start animations

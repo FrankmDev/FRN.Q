@@ -1,225 +1,713 @@
 ---
 /**
- * Preloader - Text scramble effect with split reveal (FAST VERSION)
- * Client-side only component
+ * Preloader v7 — AGGRESSIVE GSAP BRUTALIST
+ * Multi-layered, animated, impactful
  */
 
-interface Props {
-    targetText?: string;
-}
+import { siteConfig } from "../../data/site";
 
-const { targetText = "FRN.Q STUDIO" } = Astro.props;
-const letters = targetText.split("");
+const letters = siteConfig.name.split("");
 ---
 
-<script>
-    (function() {
-        document.body.style.cursor = "none";
-        document.documentElement.style.cursor = "none";
-        
-        // Hide custom cursor during preloader
-        const customCursor = document.getElementById("custom-cursor");
-        if (customCursor) {
-            customCursor.classList.add("is-hidden");
-        }
-    })();
-</script>
+<div id="preloader" class="preloader" aria-hidden="true">
+  <!-- LAYER: Grid pattern overlay -->
+  <div class="pre-grid"></div>
 
-<div
-    id="preloader"
-    class="fixed inset-0 z-[999] flex items-center justify-center pointer-events-auto"
-    data-target={targetText}
-    aria-hidden="true"
->
-    {/* Top half */}
-    <div
-        id="preloader-top"
-        class="absolute inset-0 bottom-1/2 bg-background transition-transform duration-500"
-        style="transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1)"
-    >
+  <!-- LAYER: Animated horizontal lines -->
+  <div class="pre-lines">
+    <div class="pre-hline" data-line="0"></div>
+    <div class="pre-hline" data-line="1"></div>
+    <div class="pre-hline" data-line="2"></div>
+    <div class="pre-hline" data-line="3"></div>
+    <div class="pre-hline" data-line="4"></div>
+  </div>
+
+  <!-- LAYER: Noise grain -->
+  <div class="pre-noise"></div>
+
+  <!-- TOP -->
+  <div class="pre-top">
+    <div class="pre-top-left">
+      <div class="pre-dot"></div>
+      <span class="pre-mono" id="pre-status">SYS.BOOT</span>
     </div>
-    {/* Bottom half */}
-    <div
-        id="preloader-bottom"
-        class="absolute inset-0 top-1/2 bg-background transition-transform duration-500"
-        style="transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1)"
-    >
+    <div class="pre-top-right">
+      <span class="pre-mono pre-mono--dim">{siteConfig.year}</span>
+      <span class="pre-section-num">00</span>
+    </div>
+  </div>
+
+  <!-- CENTER -->
+  <div class="pre-center">
+    <!-- Counter (massive, behind brand) -->
+    <div class="pre-counter-bg" id="pre-counter-bg">
+      <span id="pre-bg-num">00</span>
     </div>
 
-    {/* Scramble Text Container */}
-    <div
-        id="preloader-text"
-        class="relative z-10 flex items-center justify-center"
-    >
+    <!-- Brand name row -->
+    <div class="pre-brand-row">
+      <!-- Left border block -->
+      <div class="pre-border-block pre-border-block--left" id="pre-block-l">
+      </div>
+
+      <!-- Letters -->
+      <h1 class="pre-brand" id="pre-brand">
         {
-            letters.map((char, i) => (
-                <span
-                    class={`preloader-letter ${char === "." ? "" : "text-muted-foreground"}`}
-                    data-index={i}
-                    data-char={char}
-                    style={
-                        char === "."
-                            ? "font-family: var(--font-display); font-weight: 900; font-size: clamp(3rem, 12vw, 10rem); letter-spacing: -0.04em; font-variant-numeric: tabular-nums; display: inline-block; line-height: 1.1; color: #BF3235;"
-                            : "font-family: var(--font-display); font-weight: 900; font-size: clamp(3rem, 12vw, 10rem); letter-spacing: -0.04em; font-variant-numeric: tabular-nums; display: inline-block; line-height: 1.1;"
-                    }
-                >
-                    {" "}
-                </span>
-            ))
+          letters.map((letter, i) => (
+            <span
+              class={`pre-letter ${letter === "." ? "pre-letter--accent" : ""}`}
+              data-index={i}
+            >
+              {letter}
+            </span>
+          ))
         }
+      </h1>
+
+      <!-- Right border block -->
+      <div class="pre-border-block pre-border-block--right" id="pre-block-r">
+      </div>
     </div>
 
-    {/* Progress line */}
-    <div
-        class="absolute bottom-16 left-1/2 -translate-x-1/2 w-48 h-[1px] bg-muted overflow-hidden"
-    >
-        <div
-            id="progress-bar"
-            class="h-full bg-foreground origin-left"
-            style="transform: scaleX(0); transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1)"
-        >
-        </div>
+    <!-- Subtitle -->
+    <div class="pre-sub" id="pre-sub">
+      <span class="pre-sub-line"></span>
+      <span class="pre-mono pre-mono--accent">Creative Developer</span>
+      <span class="pre-sub-line"></span>
     </div>
+
+    <!-- Small counter -->
+    <div class="pre-pct" id="pre-pct">
+      <span class="pre-pct-num" id="pre-num">0</span>
+      <span class="pre-pct-sign">%</span>
+    </div>
+  </div>
+
+  <!-- BOTTOM -->
+  <div class="pre-bottom">
+    <div class="pre-bar-track">
+      <div class="pre-bar-fill" id="pre-bar"></div>
+      <div class="pre-bar-glow" id="pre-bar-glow"></div>
+    </div>
+    <div class="pre-bottom-meta">
+      <div class="pre-bottom-left">
+        <div class="pre-dot pre-dot--sm"></div>
+        <span class="pre-mono">{siteConfig.location}</span>
+      </div>
+      <span class="pre-mono pre-mono--dim">Scroll to explore</span>
+    </div>
+  </div>
+
+  <!-- EXIT: Reveal panels -->
+  <div class="pre-panel pre-panel--left" id="pre-panel-l"></div>
+  <div class="pre-panel pre-panel--right" id="pre-panel-r"></div>
 </div>
 
 <style>
-    #preloader-top.revealing {
-        transform: translateY(-100%);
-    }
+  /* ========================================
+       AGGRESSIVE BRUTALIST — GSAP POWERED
+       ======================================== */
 
-    #preloader-bottom.revealing {
-        transform: translateY(100%);
-    }
+  .preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: hsl(0 0% 2%);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
 
-    #preloader.hidden {
-        display: none;
-    }
+  /* Grid Pattern */
+  .pre-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, hsl(0 0% 96% / 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(0 0% 96% / 0.03) 1px, transparent 1px);
+    background-size: 80px 80px;
+    z-index: 1;
+    opacity: 0;
+  }
 
-    .preloader-letter {
-        transition:
-            color 0.1s ease,
-            opacity 0.25s ease,
-            transform 0.25s ease;
-    }
+  /* Horizontal sweeping lines */
+  .pre-lines {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
 
-    .preloader-letter.locked {
-        color: hsl(var(--foreground));
-    }
+  .pre-hline {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: hsl(0 58% 47%);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
 
-    .preloader-letter.exiting {
-        opacity: 0;
-        transform: translateY(-15px);
-    }
+  .pre-hline[data-line="0"] {
+    top: 20%;
+  }
+  .pre-hline[data-line="1"] {
+    top: 35%;
+  }
+  .pre-hline[data-line="2"] {
+    top: 50%;
+  }
+  .pre-hline[data-line="3"] {
+    top: 65%;
+  }
+  .pre-hline[data-line="4"] {
+    top: 80%;
+  }
 
-    /* Hide cursor during preloader */
-    #preloader {
-        cursor: none;
+  /* Noise */
+  .pre-noise {
+    position: absolute;
+    inset: -50%;
+    width: 200%;
+    height: 200%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    z-index: 3;
+    pointer-events: none;
+    animation: noise-shift 0.5s steps(5) infinite;
+  }
+
+  @keyframes noise-shift {
+    0% {
+      transform: translate(0, 0);
     }
+    20% {
+      transform: translate(-5%, -5%);
+    }
+    40% {
+      transform: translate(5%, -3%);
+    }
+    60% {
+      transform: translate(-3%, 5%);
+    }
+    80% {
+      transform: translate(3%, 3%);
+    }
+    100% {
+      transform: translate(0, 0);
+    }
+  }
+
+  /* === SHARED === */
+  .pre-mono {
+    font-family: var(--font-mono, "JetBrains Mono", monospace);
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: hsl(0 0% 50%);
+    font-weight: 500;
+  }
+
+  .pre-mono--accent {
+    color: hsl(0 58% 47% / 0.9);
+  }
+  .pre-mono--dim {
+    color: hsl(0 0% 25%);
+  }
+
+  .pre-dot {
+    width: 8px;
+    height: 8px;
+    background: hsl(0 58% 47%);
+    flex-shrink: 0;
+  }
+
+  .pre-dot--sm {
+    width: 5px;
+    height: 5px;
+  }
+
+  /* === TOP === */
+  .pre-top {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 2px solid hsl(0 0% 96%);
+    opacity: 0;
+  }
+
+  @media (min-width: 1024px) {
+    .pre-top {
+      padding: 1rem 3rem;
+    }
+  }
+
+  .pre-top-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .pre-top-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .pre-section-num {
+    font-family: var(--font-display, "Inter Tight", sans-serif);
+    font-weight: 900;
+    font-size: 2rem;
+    color: hsl(0 0% 96% / 0.08);
+    line-height: 1;
+  }
+
+  /* === CENTER === */
+  .pre-center {
+    position: relative;
+    z-index: 10;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 2rem 1.5rem;
+  }
+
+  /* Background counter (massive, behind everything) */
+  .pre-counter-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    font-family: var(--font-display, "Inter Tight", sans-serif);
+    font-weight: 900;
+    font-size: clamp(15rem, 50vw, 50rem);
+    color: hsl(0 0% 96% / 0.03);
+    line-height: 0.8;
+    pointer-events: none;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    opacity: 0;
+  }
+
+  /* Brand row with border blocks */
+  .pre-brand-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    position: relative;
+  }
+
+  .pre-border-block {
+    width: 0;
+    height: 6px;
+    background: hsl(0 58% 47%);
+  }
+
+  .pre-border-block--left {
+    margin-right: 1.5rem;
+  }
+
+  .pre-border-block--right {
+    margin-left: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .pre-border-block {
+      display: none;
+    }
+  }
+
+  .pre-brand {
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    line-height: 0.8;
+    overflow: hidden;
+  }
+
+  .pre-letter {
+    display: inline-block;
+    font-family: var(--font-display, "Inter Tight", sans-serif);
+    font-size: clamp(5rem, 22vw, 18rem);
+    font-weight: 900;
+    color: hsl(0 0% 96%);
+    letter-spacing: -0.08em;
+    opacity: 0;
+    transform: translateY(120%);
+    will-change: transform, opacity;
+  }
+
+  .pre-letter--accent {
+    color: hsl(0 58% 47%);
+  }
+
+  @media (min-width: 768px) {
+    .pre-letter {
+      font-size: clamp(6rem, 18vw, 16rem);
+    }
+  }
+
+  /* Subtitle with lines */
+  .pre-sub {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    opacity: 0;
+  }
+
+  .pre-sub-line {
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: hsl(0 0% 96% / 0.3);
+  }
+
+  @media (min-width: 768px) {
+    .pre-sub-line {
+      width: 80px;
+    }
+  }
+
+  /* Percentage */
+  .pre-pct {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+    opacity: 0;
+  }
+
+  .pre-pct-num {
+    font-family: var(--font-display, "Inter Tight", sans-serif);
+    font-weight: 900;
+    font-size: 1.5rem;
+    color: hsl(0 0% 96%);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pre-pct-sign {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: hsl(0 58% 47%);
+    font-weight: 700;
+  }
+
+  /* === BOTTOM === */
+  .pre-bottom {
+    position: relative;
+    z-index: 10;
+    border-top: 1px solid hsl(0 0% 96% / 0.1);
+    opacity: 0;
+  }
+
+  .pre-bar-track {
+    width: 100%;
+    height: 4px;
+    background: hsl(0 0% 96% / 0.04);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pre-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: hsl(0 58% 47%);
+  }
+
+  .pre-bar-glow {
+    position: absolute;
+    top: -4px;
+    left: 0;
+    height: 12px;
+    width: 0%;
+    background: hsl(0 58% 47% / 0.3);
+    filter: blur(8px);
+    pointer-events: none;
+  }
+
+  .pre-bottom-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    .pre-bottom-meta {
+      padding: 0.75rem 3rem;
+    }
+  }
+
+  .pre-bottom-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  /* === EXIT PANELS === */
+  .pre-panel {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    background: hsl(0 0% 2%);
+    z-index: 50;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  .pre-panel--left {
+    left: 0;
+    border-right: 3px solid hsl(0 58% 47%);
+  }
+
+  .pre-panel--right {
+    right: 0;
+    border-left: 3px solid hsl(0 58% 47%);
+  }
+
+  .preloader.gone {
+    display: none !important;
+  }
+
+  :global(body.preloader-lock) {
+    overflow: hidden !important;
+  }
 </style>
 
-<script>
-    document.body.style.cursor = "none";
-    
-    const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*<>{}[]";
+<script is:inline>
+  (function () {
+    // Wait for GSAP
+    function init() {
+      if (typeof window.gsap === "undefined") {
+        setTimeout(init, 30);
+        return;
+      }
 
-    const preloader = document.getElementById("preloader");
-    const preloaderTop = document.getElementById("preloader-top");
-    const preloaderBottom = document.getElementById("preloader-bottom");
-    const progressBar = document.getElementById("progress-bar");
-    const mainContent = document.getElementById("main-content");
+      var gsap = window.gsap;
+      var pre = document.getElementById("preloader");
+      var site = document.getElementById("main-content");
 
-    if (preloader && progressBar) {
-        const targetText = preloader.dataset.target || "FRN.Q STUDIO";
-        const letterElements = preloader.querySelectorAll(".preloader-letter");
-        const locked = Array(targetText.length).fill(false);
+      if (!pre) {
+        reveal();
+        return;
+      }
+      document.body.classList.add("preloader-lock");
 
-        // Start progress bar
-        requestAnimationFrame(() => {
-            progressBar.style.transform = "scaleX(1)";
+      var letters = pre.querySelectorAll(".pre-letter");
+      var hlines = pre.querySelectorAll(".pre-hline");
+      var grid = pre.querySelector(".pre-grid");
+      var top = pre.querySelector(".pre-top");
+      var bottom = pre.querySelector(".pre-bottom");
+      var sub = document.getElementById("pre-sub");
+      var pctEl = document.getElementById("pre-pct");
+      var bgNum = document.getElementById("pre-bg-num");
+      var bgCounter = document.getElementById("pre-counter-bg");
+      var barFill = document.getElementById("pre-bar");
+      var barGlow = document.getElementById("pre-bar-glow");
+      var numEl = document.getElementById("pre-num");
+      var statEl = document.getElementById("pre-status");
+      var blockL = document.getElementById("pre-block-l");
+      var blockR = document.getElementById("pre-block-r");
+      var panelL = document.getElementById("pre-panel-l");
+      var panelR = document.getElementById("pre-panel-r");
+
+      // ═══════════════════════════════════════
+      // MASTER TIMELINE
+      // ═══════════════════════════════════════
+      var tl = gsap.timeline({
+        onComplete: exitSequence,
+      });
+
+      // ── Phase 1: Structure reveals (0s)
+      tl.to(top, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0);
+      tl.to(bottom, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0);
+      tl.to(grid, { opacity: 1, duration: 0.5, ease: "none" }, 0);
+
+      // ── Phase 2: Horizontal lines sweep across (0.1s)
+      tl.to(
+        hlines,
+        {
+          scaleX: 1,
+          duration: 0.6,
+          stagger: { each: 0.08, from: "center" },
+          ease: "power4.inOut",
+        },
+        0.1,
+      );
+
+      // Fade lines back after sweep
+      tl.to(
+        hlines,
+        {
+          opacity: 0.15,
+          duration: 0.3,
+          ease: "none",
+        },
+        0.8,
+      );
+
+      // ── Phase 3: Background counter appears (0.2s)
+      tl.to(bgCounter, { opacity: 1, duration: 0.3, ease: "none" }, 0.2);
+
+      // ── Phase 4: Letters SLAM in from below (0.3s)
+      tl.to(
+        letters,
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.5,
+          stagger: 0.06,
+          ease: "back.out(1.8)",
+        },
+        0.3,
+      );
+
+      // ── Phase 5: Border blocks expand (0.6s)
+      tl.to(blockL, { width: 60, duration: 0.4, ease: "power4.out" }, 0.6);
+      tl.to(blockR, { width: 60, duration: 0.4, ease: "power4.out" }, 0.6);
+
+      // ── Phase 6: Subtitle + percentage (0.7s)
+      tl.to(sub, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0.7);
+      tl.to(pctEl, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0.75);
+
+      // ── Phase 7: Progress counter (0.3s → 1.8s)
+      var progressObj = { val: 0 };
+      tl.to(
+        progressObj,
+        {
+          val: 100,
+          duration: 1.5,
+          ease: "power2.inOut",
+          onUpdate: function () {
+            var v = Math.round(progressObj.val);
+            if (numEl) numEl.textContent = v;
+            if (bgNum) bgNum.textContent = v < 10 ? "0" + v : "" + v;
+            if (barFill) barFill.style.width = v + "%";
+            if (barGlow) barGlow.style.width = v + "%";
+            if (statEl) {
+              if (v < 25) statEl.textContent = "SYS.BOOT";
+              else if (v < 50) statEl.textContent = "LOAD.ASSETS";
+              else if (v < 75) statEl.textContent = "RENDER.UI";
+              else if (v < 100) statEl.textContent = "COMPILE";
+              else statEl.textContent = "READY";
+            }
+          },
+        },
+        0.3,
+      );
+
+      // ═══════════════════════════════════════
+      // EXIT SEQUENCE
+      // ═══════════════════════════════════════
+      function exitSequence() {
+        // Pause for dramatic effect at 100%
+        var exitTl = gsap.timeline({
+          delay: 0.3,
+          onStart: function () {
+            reveal();
+          },
         });
 
-        // Scramble effect
-        const scrambleIntervals: number[] = [];
+        // 1. Flash the whole screen white for a frame
+        exitTl.to(
+          pre,
+          {
+            backgroundColor: "hsl(0 0% 96%)",
+            duration: 0.08,
+            ease: "none",
+          },
+          0,
+        );
 
-        targetText.split("").forEach((char, i) => {
-            const el = letterElements[i];
+        exitTl.to(
+          pre,
+          {
+            backgroundColor: "hsl(0 0% 2%)",
+            duration: 0.08,
+            ease: "none",
+          },
+          0.08,
+        );
 
-            const interval = window.setInterval(() => {
-                if (!locked[i] && el) {
-                    el.textContent =
-                        CHARS[Math.floor(Math.random() * CHARS.length)];
-                }
-            }, 25);
-            scrambleIntervals.push(interval);
+        // 2. Fade out inner content
+        exitTl.to(
+          ".pre-center, .pre-top, .pre-bottom, .pre-grid, .pre-noise, .pre-lines",
+          {
+            opacity: 0,
+            duration: 0.25,
+            ease: "power2.in",
+          },
+          0.16,
+        );
 
-            // Lock character
-            setTimeout(
-                () => {
-                    clearInterval(scrambleIntervals[i]);
-                    locked[i] = true;
+        // 3. Panels appear and split open
+        exitTl.set([panelL, panelR], { opacity: 1 }, 0.35);
+        exitTl.to(
+          panelL,
+          {
+            xPercent: -100,
+            duration: 0.8,
+            ease: "power4.inOut",
+          },
+          0.4,
+        );
+        exitTl.to(
+          panelR,
+          {
+            xPercent: 100,
+            duration: 0.8,
+            ease: "power4.inOut",
+          },
+          0.4,
+        );
 
-                    if (el) {
-                        el.textContent = char === " " ? "\u00A0" : char;
-                        el.classList.remove("text-muted-foreground");
-                        el.classList.add("locked");
+        // 4. Kill
+        exitTl.call(
+          function () {
+            pre.classList.add("gone");
+            pre.style.display = "none";
+            document.body.classList.remove("preloader-lock");
+            window.dispatchEvent(new CustomEvent("preloader-complete"));
+          },
+          null,
+          1.2,
+        );
+      }
 
-                        // Flash animation
-                        el.animate(
-                            [
-                                { opacity: 0.3, transform: "scale(1.2)" },
-                                { opacity: 1, transform: "scale(1)" },
-                            ],
-                            {
-                                duration: 150,
-                                easing: "cubic-bezier(0.16, 1, 0.3, 1)",
-                            },
-                        );
-                    }
-                },
-                300 + i * 80,
-            );
-        });
+      function reveal() {
+        if (site) {
+          site.classList.remove("opacity-0");
+          site.classList.add("opacity-100");
+          site.style.opacity = "1";
+          site.style.visibility = "visible";
+        } else {
+          var els = document.querySelectorAll("div.opacity-0");
+          for (var i = 0; i < els.length; i++) {
+            els[i].classList.remove("opacity-0");
+            els[i].style.opacity = "1";
+          }
+        }
+      }
 
-        // Reveal after all locked
-        const totalLockTime = 300 + targetText.length * 80 + 200;
-
-        console.log("[Preloader] Total lock time:", totalLockTime, "ms");
-
-        setTimeout(() => {
-            console.log("[Preloader] Starting exit animation");
-
-            letterElements.forEach((letter, i) => {
-                setTimeout(() => {
-                    letter.classList.add("exiting");
-                }, i * 12);
-            });
-
-            setTimeout(() => {
-                console.log("[Preloader] Revealing curtains");
-                preloaderTop?.classList.add("revealing");
-                preloaderBottom?.classList.add("revealing");
-
-                if (mainContent) {
-                    mainContent.style.opacity = "1";
-                    console.log("[Preloader] Main content visible");
-                }
-
-                console.log("[Preloader] Dispatching preloader-complete event");
-                window.dispatchEvent(new CustomEvent("preloader-complete"));
-
-                setTimeout(() => {
-                    console.log("[Preloader] Hiding preloader");
-                    preloader?.classList.add("hidden");
-                    document.body.style.cursor = "auto";
-                    document.documentElement.style.cursor = "auto";
-                    
-                    // Show custom cursor again
-                    const customCursor = document.getElementById("custom-cursor");
-                    if (customCursor) {
-                        customCursor.classList.remove("is-hidden");
-                    }
-                }, 500);
-            }, 200);
-        }, totalLockTime);
+      // Safety
+      setTimeout(function () {
+        if (!pre.classList.contains("gone")) {
+          tl.kill();
+          reveal();
+          pre.style.display = "none";
+          document.body.classList.remove("preloader-lock");
+          window.dispatchEvent(new CustomEvent("preloader-complete"));
+        }
+      }, 6000);
     }
+
+    // Start immediately
+    init();
+  })();
 </script>

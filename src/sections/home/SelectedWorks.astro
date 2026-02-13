@@ -4,59 +4,83 @@ import { projects } from "../../data/projects";
 ---
 
 <section id="works" class="relative bg-background">
-  
-  {/* HEADER */}
-  <header class="relative border-b border-foreground/10">
-    {/* Top accent line */}
-    <div class="h-1 bg-accent"></div>
-    
+  <header
+    class="section-header relative border-b border-foreground/10 overflow-hidden"
+  >
+    {/* Top accent strip */}
+    <div class="h-1 bg-accent section-accent-line"></div>
+
     {/* Section bar */}
-    <div class="px-6 lg:px-16 py-4 flex justify-between items-center border-b border-foreground/10">
-      <div class="flex items-center gap-3">
-        <div class="w-2 h-2 bg-accent"></div>
-        <span class="font-mono text-[10px] tracking-[0.5em] text-muted-foreground uppercase">Section</span>
+    <div
+      class="px-6 lg:px-16 py-4 flex justify-between items-center border-b border-foreground/10"
+    >
+      <div class="flex items-center gap-4">
+        <span
+          class="section-cross text-accent font-mono text-xs leading-none select-none"
+          >✦</span
+        >
+        <span
+          class="section-bar-label font-mono text-[10px] tracking-[0.5em] text-muted-foreground uppercase"
+          >Section</span
+        >
+        <span class="w-12 h-px bg-foreground/20 hidden md:block"></span>
+        <span
+          class="section-bar-label font-mono text-[10px] tracking-[0.3em] text-foreground/30 uppercase hidden md:block"
+          >Portfolio</span
+        >
       </div>
-      <span class="works-section-num font-black text-4xl lg:text-5xl text-foreground/20">
-        03
-      </span>
+      <div class="flex items-center gap-4">
+        <span
+          class="works-section-num font-black text-4xl lg:text-5xl text-foreground/10 leading-none"
+          >03</span
+        >
+      </div>
     </div>
 
     {/* Main header content */}
-    <div class="px-6 lg:px-16 pt-16 lg:pt-24 pb-12 lg:pb-16">
-      {/* Label */}
-      <div class="works-label-wrapper inline-flex items-center gap-3 mb-8 px-4 py-2 border border-foreground/20">
-        <div class="w-1.5 h-1.5 bg-accent"></div>
-        <span class="works-label font-mono text-[10px] tracking-[0.4em] text-foreground uppercase">
-          Portfolio
+    <div class="relative px-6 lg:px-16 pt-16 lg:pt-24 pb-12 lg:pb-16">
+      {/* Label — Clean & Minimal */}
+      <div class="works-label-wrapper flex items-center gap-3 mb-4">
+        <span class="w-2 h-2 bg-accent"></span>
+        <span
+          class="works-label font-mono text-xs tracking-[0.4em] text-foreground uppercase"
+        >
+          Selected Works
         </span>
       </div>
 
-      {/* Title and Meta */}
-      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 lg:gap-16">
-        {/* Title */}
-        <h2 class="works-title font-black text-foreground leading-[0.8] tracking-tighter" style="font-size: clamp(6rem, 20vw, 18rem);">
+      <div
+        class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 lg:gap-16"
+      >
+        <h2
+          class="works-title font-black text-foreground leading-[0.8] tracking-tighter"
+          style="font-size: clamp(6rem, 20vw, 18rem);"
+        >
           WORKS
         </h2>
 
-        {/* Meta */}
         <div class="works-meta flex items-center gap-8 lg:gap-12 pb-2">
-          {/* Count */}
-          <div class="project-count">
-            <span class="font-mono text-[10px] tracking-[0.4em] text-muted-foreground uppercase block mb-2">
-              Projects
-            </span>
-            <span class="font-black text-5xl lg:text-6xl text-foreground leading-none">
-              {projects.length}
-            </span>
+          <div class="flex flex-col">
+            <span
+              class="font-mono text-[10px] tracking-[0.4em] text-muted-foreground uppercase block mb-2"
+              >Projects</span
+            >
+            <span
+              class="font-black text-5xl lg:text-6xl text-foreground leading-none"
+              >{projects.length}</span
+            >
           </div>
-          
-          {/* CTA */}
-          <a 
-            href="/lab" 
+
+          <a
+            href="/lab"
             class="view-all-link group inline-flex items-center gap-3 font-mono text-xs tracking-[0.2em] uppercase border-2 border-foreground px-5 py-3 hover:bg-foreground hover:text-background transition-all duration-300"
+            data-magnetic
           >
             <span>View All</span>
-            <span class="link-arrow transform group-hover:translate-x-1 transition-transform">→</span>
+            <span
+              class="link-arrow transform group-hover:translate-x-1 transition-transform"
+              >→</span
+            >
           </a>
         </div>
       </div>
@@ -65,35 +89,54 @@ import { projects } from "../../data/projects";
 
   {/* Projects List */}
   <div class="projects-list">
-    {projects.map((project, index) => (
-      <ProjectCard {...project} index={index} />
-    ))}
+    {
+      projects.map((project, index) => (
+        <ProjectCard {...project} index={index} />
+      ))
+    }
   </div>
 
   {/* Section Footer */}
   <div class="px-6 lg:px-16 py-12 lg:py-16 border-t border-foreground/10">
-    <div class="works-footer flex flex-col md:flex-row items-center justify-between gap-4">
-      <span class="font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground">
+    <div
+      class="works-footer flex flex-col md:flex-row items-center justify-between gap-4"
+    >
+      <span
+        class="font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground"
+      >
         © {new Date().getFullYear()} — All Projects
       </span>
-      
-      <a 
-        href="/lab" 
+
+      <a
+        href="/lab"
         class="explore-link group flex items-center gap-3 font-mono text-sm tracking-wider uppercase"
+        data-magnetic
       >
         <span class="relative">
           Explore Lab
-          <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-accent group-hover:w-full transition-all duration-300"></span>
+          <span
+            class="absolute bottom-0 left-0 w-0 h-[2px] bg-accent group-hover:w-full transition-all duration-300"
+          ></span>
         </span>
-        <div class="w-10 h-10 border-2 border-foreground group-hover:border-accent group-hover:bg-accent flex items-center justify-center transition-all duration-300">
-          <svg class="w-4 h-4 text-foreground group-hover:text-background transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+        <div
+          class="w-10 h-10 border-2 border-foreground group-hover:border-accent group-hover:bg-accent flex items-center justify-center transition-all duration-300"
+        >
+          <svg
+            class="w-4 h-4 text-foreground group-hover:text-background transition-colors"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="square"
+              stroke-linejoin="miter"
+              stroke-width="2"
+              d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
           </svg>
         </div>
       </a>
     </div>
   </div>
-
 </section>
 
 <style>
@@ -109,7 +152,7 @@ import { projects } from "../../data/projects";
 
   gsap.registerPlugin(ScrollTrigger);
 
-  // Footer
+  // Footer animation
   gsap.to(".works-footer", {
     y: 0,
     opacity: 1,
@@ -122,30 +165,25 @@ import { projects } from "../../data/projects";
     },
   });
 
-  // Arrow hover
-  const viewAll = document.querySelector('.view-all-link');
+  // Hover effects
+  const viewAll = document.querySelector(".view-all-link");
   if (viewAll) {
-    const arrow = viewAll.querySelector('.link-arrow');
-    
-    viewAll.addEventListener('mouseenter', () => {
+    const arrow = viewAll.querySelector(".link-arrow");
+    viewAll.addEventListener("mouseenter", () => {
       if (arrow) gsap.to(arrow, { x: 6, duration: 0.3, ease: "power2.out" });
     });
-    
-    viewAll.addEventListener('mouseleave', () => {
+    viewAll.addEventListener("mouseleave", () => {
       if (arrow) gsap.to(arrow, { x: 0, duration: 0.3, ease: "power2.out" });
     });
   }
 
-  // Explore link
-  const exploreLink = document.querySelector('.explore-link');
+  const exploreLink = document.querySelector(".explore-link");
   if (exploreLink) {
-    const arrow = exploreLink.querySelector('div');
-    
-    exploreLink.addEventListener('mouseenter', () => {
+    const arrow = exploreLink.querySelector("div");
+    exploreLink.addEventListener("mouseenter", () => {
       if (arrow) gsap.to(arrow, { x: 4, duration: 0.3, ease: "power2.out" });
     });
-    
-    exploreLink.addEventListener('mouseleave', () => {
+    exploreLink.addEventListener("mouseleave", () => {
       if (arrow) gsap.to(arrow, { x: 0, duration: 0.3, ease: "power2.out" });
     });
   }

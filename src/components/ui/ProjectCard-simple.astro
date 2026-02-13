@@ -14,50 +14,45 @@ const formattedIndex = padNumber(index + 1);
 ---
 
 <article
-  class="project-card group relative cursor-none border-b border-foreground/20 hover:border-black/20 transition-colors duration-500"
+  class="project-card group relative cursor-none border-b border-foreground/20 hover:border-accent/50 transition-colors duration-500"
   data-index={index}
   data-project-card
   data-cursor="VIEW"
 >
-  {/* White Background - scales in on hover */}
-  <div 
-    class="absolute inset-0 bg-white -z-10 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out"
-  ></div>
-
   {/* Main Content */}
   <div class="relative py-10 md:py-14 px-6 md:px-10">
     
     <div class="grid grid-cols-12 gap-4 md:gap-6 items-end">
       
-      {/* Index Column - Minimal */}
+      {/* Index Column */}
       <div class="col-span-2 md:col-span-1">
         <span 
-          class="card-index font-mono text-[10px] tracking-[0.4em] text-foreground/40 group-hover:text-black transition-colors duration-500"
+          class="card-index font-mono text-[10px] tracking-[0.4em] text-foreground/40 group-hover:text-accent transition-colors duration-500"
         >
           {formattedIndex}
         </span>
       </div>
 
-      {/* Title Column - Massive & White */}
+      {/* Title Column */}
       <div class="col-span-10 md:col-span-9">
         {/* Category */}
         <div class="mb-2 flex items-center gap-2">
-          <span class="font-mono text-[10px] tracking-[0.4em] uppercase text-foreground/50 group-hover:text-black/60 transition-colors duration-500">
+          <span class="font-mono text-[10px] tracking-[0.4em] uppercase text-foreground/50 group-hover:text-accent transition-colors duration-500">
             {category}
           </span>
-          <span class="flex-1 h-px bg-foreground/10 group-hover:bg-black/10 transition-colors duration-500 max-w-[60px]"></span>
+          <span class="flex-1 h-px bg-foreground/10 group-hover:bg-accent/30 transition-colors duration-500 max-w-[60px]"></span>
         </div>
 
-        {/* Main Title - WHITE */}
+        {/* Main Title */}
         <h3 
-          class="card-title text-[2.5rem] sm:text-[3rem] md:text-[4rem] lg:text-[6rem] xl:text-[7rem] font-black uppercase leading-[0.8] tracking-[-0.04em] text-white group-hover:text-black transition-colors duration-500"
+          class="card-title text-[2.5rem] sm:text-[3rem] md:text-[4rem] lg:text-[6rem] xl:text-[7rem] font-black uppercase leading-[0.8] tracking-[-0.04em] text-foreground group-hover:text-accent transition-colors duration-500"
         >
           {title}
         </h3>
         
         {/* Year */}
         <div class="mt-3 flex items-center gap-3">
-          <span class="font-mono text-sm tracking-widest text-foreground/50 group-hover:text-black/70 transition-colors duration-500">
+          <span class="font-mono text-sm tracking-widest text-foreground/50 group-hover:text-accent transition-colors duration-500">
             {year}
           </span>
         </div>
@@ -65,11 +60,11 @@ const formattedIndex = padNumber(index + 1);
 
       {/* Tech & Arrow Column */}
       <div class="col-span-12 md:col-span-2 flex flex-row md:flex-col items-end justify-between gap-4">
-        {/* Tech Tags - Minimal */}
+        {/* Tech Tags */}
         <div class="flex flex-wrap justify-end gap-2">
           {tech.map((item) => (
             <span 
-              class="font-mono text-[9px] tracking-[0.15em] uppercase text-foreground/40 group-hover:text-black/60 transition-colors duration-500"
+              class="font-mono text-[9px] tracking-[0.15em] uppercase text-foreground/40 group-hover:text-accent transition-colors duration-500"
             >
               {item}
             </span>
@@ -77,9 +72,9 @@ const formattedIndex = padNumber(index + 1);
         </div>
         
         {/* Arrow */}
-        <div class="view-arrow w-8 h-8 border border-foreground/30 group-hover:border-black group-hover:bg-black flex items-center justify-center transition-all duration-300">
+        <div class="view-arrow w-8 h-8 border border-foreground/30 group-hover:border-accent group-hover:bg-accent flex items-center justify-center transition-all duration-300">
           <svg 
-            class="w-3 h-3 text-foreground/60 group-hover:text-white transition-colors duration-300" 
+            class="w-3 h-3 text-foreground/60 group-hover:text-background transition-colors duration-300" 
             fill="none" 
             stroke="currentColor" 
             viewBox="0 0 24 24"
@@ -91,8 +86,8 @@ const formattedIndex = padNumber(index + 1);
     </div>
   </div>
 
-  {/* Simple bottom line indicator */}
-  <div class="absolute bottom-0 left-0 h-[2px] bg-white w-0 group-hover:w-full transition-all duration-500 ease-out"></div>
+  {/* Accent line on hover */}
+  <div class="absolute bottom-0 left-0 h-[2px] bg-accent w-0 group-hover:w-full transition-all duration-500 ease-out"></div>
 </article>
 
 <style>
@@ -112,5 +107,3 @@ const formattedIndex = padNumber(index + 1);
     color: black;
   }
 </style>
-
-<!-- Animaciones movidas a UnifiedGSAP.astro -->

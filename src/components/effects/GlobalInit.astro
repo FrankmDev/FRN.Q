@@ -1,0 +1,78 @@
+---
+/**
+ * GlobalInit - Initialize all animation effects after page load
+ * Centralized initialization for AnimationUtils features
+ */
+---
+
+<script is:inline>
+  (function initGlobalEffects() {
+    // Wait for GSAP and AnimationUtils
+    function checkAndInit() {
+      if (typeof window.gsap === 'undefined' || typeof window.AnimationUtils === 'undefined') {
+        setTimeout(checkAndInit, 50);
+        return;
+      }
+      
+      console.log('[GlobalInit] Initializing effects...');
+      
+      // 1. Initialize magnetic effects
+      if (window.AnimationUtils.initMagnetic) {
+        // Project cards
+        window.AnimationUtils.initMagnetic('[data-magnetic]', {
+          strength: 0.2,
+          radius: 80,
+          ease: 0.15
+        });
+        
+        console.log('[GlobalInit] Magnetic effects initialized');
+      }
+      
+      // 2. Initialize text scramble on hover
+      if (window.AnimationUtils.initTextScramble) {
+        window.AnimationUtils.initTextScramble('[data-text-scramble]');
+        console.log('[GlobalInit] Text scramble initialized');
+      }
+      
+      // 3. Initialize hover lift effects
+      if (window.AnimationUtils.initHoverLift) {
+        window.AnimationUtils.initHoverLift('[data-hover-lift]', {
+          lift: -4,
+          shadow: false,
+          duration: 0.3
+        });
+        console.log('[GlobalInit] Hover lift initialized');
+      }
+      
+      // 4. Initialize parallax effects
+      if (window.AnimationUtils.initParallax) {
+        window.AnimationUtils.initParallax('[data-parallax]', {
+          speed: 0.3,
+          direction: 'vertical'
+        });
+        console.log('[GlobalInit] Parallax initialized');
+      }
+      
+      // 5. Initialize line draw animations
+      if (window.AnimationUtils.initLineDraw) {
+        window.AnimationUtils.initLineDraw('.animate-draw-line', {
+          duration: 0.8,
+          ease: 'power2.inOut'
+        });
+        console.log('[GlobalInit] Line draw initialized');
+      }
+      
+      console.log('[GlobalInit] All effects initialized successfully');
+    }
+    
+    // Start initialization
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', checkAndInit);
+    } else {
+      checkAndInit();
+    }
+    
+    // Re-initialize on Astro page transitions
+    document.addEventListener('astro:page-load', checkAndInit);
+  })();
+</script>

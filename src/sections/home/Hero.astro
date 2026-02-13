@@ -62,7 +62,7 @@ const letters = displayName.split("");
       >
     </div>
 
-    {/* Title - Individual Letters - VISIBLE BY DEFAULT */}
+    {/* Title */}
     <div class="relative">
       <h1
         id="hero-title"
@@ -80,6 +80,8 @@ const letters = displayName.split("");
               class={`hero-letter inline-block ${letter === "." ? "text-accent" : ""}`}
               data-letter
               data-index={i}
+              data-magnetic
+              data-magnetic-strength="0.2"
             >
               {letter === " " ? "\u00A0" : letter}
             </span>
@@ -200,7 +202,11 @@ const letters = displayName.split("");
     transform-origin: center center;
     white-space: pre;
     margin-right: -0.08em;
-    /* Initial state will be set by GSAP */
+    cursor: default;
+  }
+   
+  .hero-letter:hover {
+    color: hsl(var(--accent));
   }
 
   #hero-label {
@@ -344,190 +350,4 @@ const letters = displayName.split("");
   }
 </style>
 
-<script>
-  // Simple, direct approach - wait for GSAP and animate
-  console.log("[Hero] Script loaded");
-
-  function animateHero() {
-    console.log("[Hero] animateHero called");
-
-    // Check GSAP
-    if (typeof window.gsap === "undefined") {
-      console.log("[Hero] GSAP not ready, waiting...");
-      setTimeout(animateHero, 50);
-      return;
-    }
-
-    const letters = document.querySelectorAll("[data-letter]");
-    console.log("[Hero] Letters found:", letters.length);
-
-    if (letters.length === 0) {
-      console.error("[Hero] No letters found!");
-      return;
-    }
-
-    console.log("[Hero] Starting BRUTAL animation NOW");
-
-    // BRUTALIST MINIMAL - Direct and heavy
-    letters.forEach((letter, i) => {
-      // Set initial state - all from top
-      window.gsap.set(letter, {
-        y: -200,
-        opacity: 0,
-      });
-
-      // Single brutal drop
-      window.gsap.to(letter, {
-        y: 0,
-        opacity: 1,
-        duration: 0.6,
-        delay: 0.05 + i * 0.05,
-        ease: "power4.out",
-      });
-    });
-
-    // Animate other elements with brutal timing
-    const heroLabel = document.getElementById("hero-label");
-    const heroLine = document.getElementById("hero-line");
-    const heroScroll = document.getElementById("hero-scroll");
-    const heroMeta = document.getElementById("hero-meta");
-
-    if (heroLabel)
-      window.gsap.to(heroLabel, {
-        y: 0,
-        opacity: 1,
-        duration: 0.5,
-        delay: 0.6,
-        ease: "power4.out",
-      });
-    if (heroLine) {
-      window.gsap.fromTo(heroLine, 
-        { scaleX: 0, opacity: 0 },
-        { 
-          scaleX: 1, 
-          opacity: 1,
-          duration: 0.6, 
-          delay: 0.8,
-          ease: "power4.out",
-        }
-      );
-      // Animate glow line
-      const heroLineGlow = document.getElementById("hero-line-glow");
-      if (heroLineGlow) {
-        window.gsap.fromTo(heroLineGlow,
-          { scaleX: 0, opacity: 0 },
-          {
-            scaleX: 1,
-            opacity: 1,
-            duration: 0.8,
-            delay: 1,
-            ease: "power3.out",
-          }
-        );
-      }
-    }
-    if (heroScroll)
-      window.gsap.to(heroScroll, {
-        opacity: 1,
-        y: 0,
-        duration: 0.5,
-        delay: 1.0,
-        ease: "power4.out",
-      });
-    if (heroMeta)
-      window.gsap.to(heroMeta, { opacity: 1, y: 0, duration: 0.5, delay: 1.1 });
-
-    console.log("[Hero] BRUTAL animation sequence initiated");
-  }
-
-  // Listen for preloader complete
-  let animationTriggered = false;
-
-  window.addEventListener("preloader-complete", () => {
-    console.log("[Hero] Preloader complete event received");
-    if (!animationTriggered) {
-      animationTriggered = true;
-      animateHero();
-    }
-  });
-
-  // Fallback - start after 2 seconds regardless
-  setTimeout(() => {
-    console.log("[Hero] Fallback timeout triggered");
-    if (!animationTriggered) {
-      animationTriggered = true;
-      animateHero();
-    }
-  }, 2000);
-
-  // Enhanced Parallax scroll effect with depth layers
-  const heroBg = document.getElementById("hero-bg");
-  const heroContent = document.getElementById("hero-content");
-  const heroLabel = document.getElementById("hero-label");
-  const heroScroll = document.getElementById("hero-scroll");
-  const heroMeta = document.getElementById("hero-meta");
-
-  if (heroBg && heroContent) {
-    let ticking = false;
-    let lastScrollY = 0;
-    
-    window.addEventListener(
-      "scroll",
-      () => {
-        if (!ticking) {
-          requestAnimationFrame(() => {
-            const scrollY = window.scrollY;
-            const heroHeight = window.innerHeight;
-            const progress = Math.min(scrollY / heroHeight, 1);
-            const scrollDelta = scrollY - lastScrollY;
-            lastScrollY = scrollY;
-
-            // Background parallax - slower movement
-            heroBg.style.transform = `translateY(${progress * 30}%) scale(${1 + progress * 0.2})`;
-
-            // Only apply parallax after animation has triggered
-            if (animationTriggered) {
-              // Content moves faster for depth
-              heroContent.style.transform = `translateY(${progress * 20}%)`;
-              heroContent.style.opacity = String(1 - progress * 1.5);
-              
-              // Label fades out slightly earlier
-              if (heroLabel) {
-                heroLabel.style.opacity = String(1 - progress * 2);
-                heroLabel.style.transform = `translateY(${progress * -10}px)`;
-              }
-              
-              // Scroll indicator fades out
-              if (heroScroll) {
-                heroScroll.style.opacity = String(1 - progress * 3);
-              }
-              
-              // Meta bar stays visible longer
-              if (heroMeta) {
-                heroMeta.style.opacity = String(1 - progress * 1.2);
-              }
-            }
-
-            ticking = false;
-          });
-          ticking = true;
-        }
-      },
-      { passive: true },
-    );
-  }
-
-  // Smooth scroll
-  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-    anchor.addEventListener("click", (e) => {
-      const href = anchor.getAttribute("href");
-      if (href && href !== "#") {
-        const target = document.querySelector(href);
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({ behavior: "smooth" });
-        }
-      }
-    });
-  });
-</script>
+<!-- Animaciones movidas a UnifiedGSAP.astro -->
