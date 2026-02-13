@@ -1,0 +1,195 @@
+---
+const line1 = "MASSIVE";
+const line2 = "STUDIOS";
+---
+
+<section
+  id="massive-studios"
+  class="relative py-32 md:py-40 lg:py-48 overflow-hidden"
+>
+  {/* Terracotta Red Background */}
+  <div class="absolute inset-0 -z-30" style="background-color: #b73a3a;"></div>
+
+  {/* Film Grain Layer 1 - Fine noise like the image */}
+  <div
+    class="absolute inset-0 opacity-[0.18] pointer-events-none -z-20"
+    style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 256 256%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22g%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3CfeColorMatrix type=%22saturate%22 values=%220%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23g)%22/%3E%3C/svg%3E'); background-size: 256px 256px;"
+  >
+  </div>
+
+  {/* Film Grain Layer 2 - Different frequency for depth */}
+  <div
+    class="absolute inset-0 opacity-[0.12] pointer-events-none -z-20"
+    style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22g2%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%221.4%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3CfeColorMatrix type=%22saturate%22 values=%220%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23g2)%22/%3E%3C/svg%3E'); background-size: 200px 200px;"
+  >
+  </div>
+
+  {/* Heavy Border Frame */}
+  <div
+    class="absolute inset-6 md:inset-10 lg:inset-16 border-2 border-black/25 pointer-events-none"
+  >
+    <div
+      class="absolute -top-px -left-px w-6 h-6 border-t-2 border-l-2 border-black"
+    >
+    </div>
+    <div
+      class="absolute -top-px -right-px w-6 h-6 border-t-2 border-r-2 border-black"
+    >
+    </div>
+    <div
+      class="absolute -bottom-px -left-px w-6 h-6 border-b-2 border-l-2 border-black"
+    >
+    </div>
+    <div
+      class="absolute -bottom-px -right-px w-6 h-6 border-b-2 border-r-2 border-black"
+    >
+    </div>
+  </div>
+
+  {/* Content */}
+  <div class="relative z-10 px-6 md:px-12 lg:px-20">
+    {/* Top Row */}
+    <div class="flex justify-between items-start mb-16 md:mb-24">
+      <span
+        class="massive-label font-mono text-xs tracking-[0.4em] text-black/50 uppercase"
+      >
+        Est. 2026
+      </span>
+      <span
+        class="massive-label font-mono text-xs tracking-[0.4em] text-black/50 uppercase"
+      >
+        Granada
+      </span>
+    </div>
+
+    {/* Giant Title - Centered */}
+    <div class="text-center mb-20 md:mb-28 relative">
+      <h2
+        class="massive-title text-black uppercase leading-[0.75] relative"
+        style="font-size: clamp(8rem, 28vw, 24rem); font-family: 'Bokis', serif; font-weight: 400; letter-spacing: -0.02em;"
+      >
+        {line1}
+      </h2>
+      <h3
+        class="massive-subtitle text-black uppercase leading-[0.75] -mt-4 md:-mt-8 relative"
+        style="font-size: clamp(1.5rem, 5vw, 4rem); font-family: 'Bokis', serif; font-weight: 400; letter-spacing: -0.02em;"
+      >
+        {line2}
+      </h3>
+    </div>
+
+    {/* Bottom Row - Asymmetric */}
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
+      {/* Left - Tagline */}
+      <div class="md:col-span-5 massive-desc">
+        <p
+          class="font-mono text-sm text-black/60 leading-relaxed uppercase tracking-widest"
+        >
+          Creative Engineering Agency
+        </p>
+      </div>
+
+      {/* Center - Divider line */}
+      <div class="md:col-span-2 hidden md:flex justify-center">
+        <div class="w-px h-16 bg-black/15"></div>
+      </div>
+
+      {/* Right - CTA */}
+      <div class="md:col-span-5 massive-cta md:text-right">
+        <a
+          href="mailto:hello@frn.q?subject=MASSIVE%20STUDIOS"
+          class="group inline-flex items-center gap-3 border-2 border-black px-5 py-3 font-mono text-xs font-bold text-black uppercase tracking-widest hover:bg-black hover:text-white transition-all duration-300"
+        >
+          <span>Stay Updated</span>
+          <span class="transform group-hover:translate-x-1 transition-transform"
+            >→</span
+          >
+        </a>
+      </div>
+    </div>
+  </div>
+
+  {/* Corner Slash */}
+  <div
+    class="absolute bottom-20 right-8 lg:right-16 w-[2px] h-24 bg-black/15 -skew-x-12 hidden md:block"
+  >
+  </div>
+</section>
+
+<style>
+  @font-face {
+    font-family: "Bokis";
+    src: url("/fonts/Bokis-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  .massive-label,
+  .massive-title,
+  .massive-subtitle,
+  .massive-desc,
+  .massive-cta {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const section = document.getElementById("massive-studios");
+  if (section) {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: "top 80%",
+        toggleActions: "play none none reverse",
+      },
+    });
+
+    tl.from(".massive-label", {
+      y: 15,
+      opacity: 0,
+      duration: 0.5,
+      stagger: 0.1,
+      ease: "power2.out",
+    });
+
+    tl.from(
+      ".massive-title",
+      {
+        y: 80,
+        opacity: 0,
+        duration: 0.9,
+        ease: "power3.out",
+      },
+      "-=0.2",
+    );
+
+    tl.from(
+      ".massive-subtitle",
+      {
+        y: 60,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.out",
+      },
+      "-=0.6",
+    );
+
+    tl.from(
+      [".massive-desc", ".massive-cta"],
+      {
+        y: 25,
+        opacity: 0,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: "power2.out",
+      },
+      "-=0.4",
+    );
+  }
+</script>

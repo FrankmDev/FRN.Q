@@ -1,0 +1,848 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const title = "LAB — FRN.Q";
+const description = "Experimental playground — Break things. Ship anyway.";
+
+const experiments = [
+    {
+        id: "01",
+        title: "GLITCH",
+        subtitle: "MANIFESTO",
+        type: "VISUAL",
+        year: "2025",
+        status: "LIVE",
+        rotation: -5,
+    },
+    {
+        id: "02",
+        title: "NOISE",
+        subtitle: "FIELD #47",
+        type: "GENERATIVE",
+        year: "2025",
+        status: "WIP",
+        rotation: 3,
+    },
+    {
+        id: "03",
+        title: "BROKEN",
+        subtitle: "GRID",
+        type: "LAYOUT",
+        year: "2024",
+        status: "ARCHIVED",
+        rotation: -4,
+    },
+    {
+        id: "04",
+        title: "PIXEL",
+        subtitle: "DECAY",
+        type: "SHADER",
+        year: "2024",
+        status: "LIVE",
+        rotation: 6,
+    },
+    {
+        id: "05",
+        title: "TYPE",
+        subtitle: "DESTROYER",
+        type: "TYPOGRAPHY",
+        year: "2024",
+        status: "WIP",
+        rotation: -3,
+    },
+    {
+        id: "06",
+        title: "RAW",
+        subtitle: "INPUT",
+        type: "INTERACTIVE",
+        year: "2024",
+        status: "LIVE",
+        rotation: 4,
+    },
+    {
+        id: "07",
+        title: "VOID",
+        subtitle: "WALKER",
+        type: "EXPERIMENT",
+        year: "2024",
+        status: "WIP",
+        rotation: -6,
+    },
+    {
+        id: "08",
+        title: "DATA",
+        subtitle: "MOOSH",
+        type: "GENERATIVE",
+        year: "2023",
+        status: "ARCHIVED",
+        rotation: 2,
+    },
+];
+
+const floatingWords = [
+    "CHAOS",
+    "BREAK",
+    "GLITCH",
+    "RAW",
+    "ERROR",
+    "VOID",
+    "NOISE",
+    "SYSTEM",
+];
+---
+
+<Layout title={title} description={description}>
+    <div
+        id="lab-page"
+        class="min-h-screen bg-[#BF3235] text-black relative overflow-x-hidden"
+    >
+        {/* CUSTOM CURSOR FOR LAB - White cursor on red background */}
+        <div
+            id="lab-cursor-dot"
+            class="fixed w-3 h-3 bg-white rounded-full pointer-events-none z-[9999] hidden md:block"
+            style="transform: translate(-50%, -50%);"
+        >
+        </div>
+        <div
+            id="lab-cursor-ring"
+            class="fixed w-8 h-8 border-2 border-white rounded-full pointer-events-none z-[9998] hidden md:block"
+            style="transform: translate(-50%, -50%); transition: all 0.15s ease;"
+        >
+        </div>
+
+        {/* AGGRESSIVE NOISE OVERLAY - Animated */}
+        <div
+            id="noise-overlay"
+            class="fixed inset-0 pointer-events-none z-[90] mix-blend-multiply opacity-50"
+            style="background-image: url(&quot;data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E&quot;); animation: noiseShift 0.2s steps(4) infinite;"
+        >
+        </div>
+
+        {/* SCANLINES - Moving */}
+        <div
+            class="fixed inset-0 pointer-events-none z-[95]"
+            style="background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px); animation: scanMove 8s linear infinite;"
+        >
+        </div>
+
+        {/* FLOATING BACKGROUND TEXT */}
+        <div class="fixed inset-0 pointer-events-none z-[80] overflow-hidden">
+            {
+                floatingWords.map((word, i) => (
+                    <span
+                        class="absolute font-black text-[15vw] text-black/5 whitespace-nowrap select-none"
+                        style={{
+                            left: `${(i * 12) % 100}%`,
+                            top: `${(i * 15) % 100}%`,
+                            transform: `rotate(${-20 + i * 10}deg)`,
+                            animation: `float${i % 3} ${8 + i * 2}s ease-in-out infinite`,
+                        }}
+                    >
+                        {word}
+                    </span>
+                ))
+            }
+        </div>
+
+        {/* FLASH ON LOAD */}
+        <div
+            id="flash"
+            class="fixed inset-0 bg-white z-[200] pointer-events-none"
+        >
+        </div>
+
+        {/* HEADER - BRUTAL NAVIGATION */}
+        <header
+            class="fixed top-0 left-0 right-0 z-[100] border-b-4 border-black bg-[#BF3235]"
+        >
+            <div class="flex items-center justify-between px-4 py-3">
+                <a
+                    href="/"
+                    class="group flex items-center gap-2 hover:scale-105 transition-transform cursor-pointer"
+                >
+                    <span
+                        class="text-2xl font-black tracking-tighter animate-pulse"
+                        >←</span
+                    >
+                    <span
+                        class="font-black text-xs tracking-[0.2em] border-2 border-black px-3 py-1.5 bg-black text-[#BF3235] hover:bg-transparent hover:text-black transition-colors"
+                    >
+                        EXIT
+                    </span>
+                </a>
+
+                <div class="flex items-center gap-4">
+                    <div
+                        class="hidden md:flex items-center gap-2 px-3 py-1 border-2 border-black bg-black text-[#BF3235]"
+                    >
+                        <span class="w-2 h-2 bg-[#BF3235] animate-ping"></span>
+                        <span
+                            class="font-mono text-[0.6rem] font-bold tracking-widest"
+                            >SYSTEM_OVERRIDE</span
+                        >
+                    </div>
+                    <span class="font-black text-xl animate-pulse">⚠</span>
+                </div>
+            </div>
+
+            {/* WARNING TICKER */}
+            <div
+                class="border-t-2 border-black overflow-hidden bg-black py-1.5"
+            >
+                <div class="animate-ticker whitespace-nowrap flex">
+                    {
+                        Array(20)
+                            .fill(null)
+                            .map((_, i) => (
+                                <span class="font-black text-xs tracking-widest text-[#BF3235] mx-8">
+                                    ⚠ EXPERIMENTAL ZONE ⚠ BROKEN CODE ⚠ NO
+                                    WARRANTIES ⚠ ENTER AT OWN RISK ⚠
+                                </span>
+                            ))
+                    }
+                </div>
+            </div>
+        </header>
+
+        {/* MAIN CONTENT */}
+        <main class="pt-32 pb-20 px-4 relative z-10">
+            {/* HERO - DESTROYED TYPOGRAPHY */}
+            <section
+                class="relative min-h-[70vh] flex items-center justify-center mb-20"
+            >
+                <div class="relative">
+                    {/* Shadow layers for depth */}
+                    <h1
+                        class="font-black text-[25vw] leading-[0.75] tracking-[0.02em] text-black relative z-10 select-none lab-title"
+                        style={{
+                            fontFamily: "Impact, 'Arial Black', sans-serif",
+                        }}
+                    >
+                        <span
+                            class="block ml-[-2vw] glitch-letter hover-letter-lab"
+                            data-text="L">L</span
+                        >
+                        <span
+                            class="block ml-[12vw] -mt-[4vw] glitch-letter hover-letter-lab"
+                            data-text="A">A</span
+                        >
+                        <span
+                            class="block ml-[4vw] -mt-[4vw] glitch-letter hover-letter-lab"
+                            data-text="B">B</span
+                        >
+                    </h1>
+
+                    {/* Glitch duplicates */}
+                    <span
+                        class="absolute top-0 left-0 font-black text-[25vw] leading-[0.75] tracking-[0.02em] text-black/20 -translate-x-3 glitch-offset-1"
+                        style={{
+                            fontFamily: "Impact, 'Arial Black', sans-serif",
+                        }}
+                    >
+                        LAB
+                    </span>
+                    <span
+                        class="absolute top-0 left-0 font-black text-[25vw] leading-[0.75] tracking-[0.02em] text-white/30 translate-x-2 glitch-offset-2"
+                        style={{
+                            fontFamily: "Impact, 'Arial Black', sans-serif",
+                        }}
+                    >
+                        LAB
+                    </span>
+                </div>
+
+                {/* Corner decorations */}
+                <div
+                    class="absolute top-0 left-0 w-20 h-20 border-l-4 border-t-4 border-black animate-corner"
+                >
+                </div>
+                <div
+                    class="absolute top-0 right-0 w-20 h-20 border-r-4 border-t-4 border-black animate-corner"
+                    style={{ animationDelay: "0.2s" }}
+                >
+                </div>
+                <div
+                    class="absolute bottom-0 left-0 w-20 h-20 border-l-4 border-b-4 border-black animate-corner"
+                    style={{ animationDelay: "0.4s" }}
+                >
+                </div>
+                <div
+                    class="absolute bottom-0 right-0 w-20 h-20 border-r-4 border-b-4 border-black animate-corner"
+                    style={{ animationDelay: "0.6s" }}
+                >
+                </div>
+            </section>
+
+            {/* MANIFESTO BAR */}
+            <section
+                class="border-y-4 border-black bg-black py-6 mb-16 -mx-4 px-4"
+            >
+                <p
+                    class="font-black text-2xl md:text-4xl lg:text-5xl text-[#BF3235] text-center leading-tight tracking-tight"
+                >
+                    UNFINISHED THOUGHTS / BROKEN PROTOTYPES / THINGS THAT SHOULD
+                    NOT EXIST
+                </p>
+            </section>
+
+            {/* EXPERIMENTS GRID - CHAOTIC LAYOUT */}
+            <section class="mb-20">
+                <div
+                    class="flex items-center justify-between mb-8 border-b-4 border-black pb-4"
+                >
+                    <h2 class="font-black text-3xl tracking-tighter">
+                        EXPERIMENTS
+                    </h2>
+                    <span
+                        class="font-mono text-sm font-bold border-2 border-black px-3 py-1 bg-black text-[#BF3235]"
+                        >08 TOTAL</span
+                    >
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {
+                        experiments.map((exp, i) => (
+                            <article
+                                class="experiment-card group relative bg-[#BF3235] border-4 border-black p-6 cursor-pointer transition-all duration-300 hover:z-20 hover:scale-[1.02] hover:rotate-0 opacity-0"
+                                data-index={i}
+                                style={`--rotation: ${exp.rotation}deg; transform: rotate(${exp.rotation}deg);`}
+                            >
+                                {/* Status badge */}
+                                <div class="absolute -top-3 -right-2 z-10">
+                                    <span
+                                        class={`
+                  font-mono text-[0.55rem] font-black tracking-widest px-3 py-1.5 border-2 border-black
+                  ${exp.status === "LIVE" ? "bg-black text-[#BF3235]" : ""}
+                  ${exp.status === "WIP" ? "bg-white text-black" : ""}
+                  ${exp.status === "ARCHIVED" ? "bg-transparent text-black" : ""}
+                `}
+                                    >
+                                        {exp.status}
+                                    </span>
+                                </div>
+
+                                {/* ID - Huge */}
+                                <span class="absolute top-4 left-4 font-black text-[8rem] leading-none text-black/10 group-hover:text-black/20 transition-colors">
+                                    {exp.id}
+                                </span>
+
+                                {/* Content */}
+                                <div class="relative z-10 pt-20">
+                                    <div class="mb-2">
+                                        <span class="font-mono text-xs font-bold tracking-widest bg-black text-[#BF3235] px-2 py-1">
+                                            {exp.type}
+                                        </span>
+                                        <span class="font-mono text-xs font-bold ml-2">
+                                            {exp.year}
+                                        </span>
+                                    </div>
+
+                                    <h3
+                                        class="font-black text-5xl md:text-6xl lg:text-7xl leading-[0.85] tracking-tight mb-2 group-hover:translate-x-2 transition-transform hover-letter-lab"
+                                        style={{
+                                            fontFamily:
+                                                "Impact, 'Arial Black', sans-serif",
+                                        }}
+                                    >
+                                        {exp.title}
+                                    </h3>
+                                    <h4
+                                        class="font-black text-4xl md:text-5xl text-white group-hover:text-black transition-colors hover-letter-lab"
+                                        style={{
+                                            fontFamily:
+                                                "Impact, 'Arial Black', sans-serif",
+                                            mixBlendMode: "difference",
+                                        }}
+                                    >
+                                        {exp.subtitle}
+                                    </h4>
+                                </div>
+
+                                {/* Hover arrow - aggressive */}
+                                <div class="absolute bottom-4 right-4 text-5xl font-black opacity-0 group-hover:opacity-100 transition-all duration-200 transform translate-x-4 group-hover:translate-x-0 group-hover:rotate-12">
+                                    →
+                                </div>
+
+                                {/* Hover border effect */}
+                                <div class="absolute inset-0 border-4 border-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                            </article>
+                        ))
+                    }
+                </div>
+            </section>
+
+            {/* MANIFESTO SECTION - AGGRESSIVE */}
+            <section
+                class="border-4 border-black bg-black p-8 md:p-16 relative overflow-hidden"
+            >
+                {/* Background pattern */}
+                <div
+                    class="absolute inset-0 opacity-10"
+                    style="background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, #BF3235 10px, #BF3235 20px);"
+                >
+                </div>
+
+                <div class="relative z-10 text-center">
+                    <span
+                        class="font-mono text-xs font-bold tracking-[0.5em] text-[#BF3235]/60 mb-6 block"
+                    >
+                        — MANIFESTO —
+                    </span>
+
+                    <h2
+                        class="font-black text-6xl md:text-8xl lg:text-9xl leading-[0.85] tracking-tighter text-[#BF3235] mb-4 hover-letter-lab"
+                        style={{
+                            fontFamily: "Impact, 'Arial Black', sans-serif",
+                        }}
+                    >
+                        BREAK
+                        <span
+                            class="block text-white"
+                            style={{ mixBlendMode: "difference" }}>THINGS</span
+                        >
+                    </h2>
+
+                    <div class="flex items-center justify-center gap-4 my-8">
+                        <div class="h-1 w-20 bg-[#BF3235]"></div>
+                        <span class="font-black text-4xl">⚡</span>
+                        <div class="h-1 w-20 bg-[#BF3235]"></div>
+                    </div>
+
+                    <p
+                        class="font-mono text-sm md:text-base font-bold tracking-widest text-white/80 max-w-2xl mx-auto leading-relaxed"
+                    >
+                        THIS IS WHERE CODE GOES TO MISBEHAVE.<br />
+                        EXPERIMENTS ARE MESSY. PROTOTYPES BREAK.<br />
+                        <span class="text-[#BF3235]">THAT'S THE POINT.</span>
+                    </p>
+
+                    <div
+                        class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
+                    >
+                        <a
+                            href="mailto:hello@frn.q"
+                            class="font-black text-lg tracking-widest border-4 border-[#BF3235] px-8 py-4 text-[#BF3235] hover:bg-[#BF3235] hover:text-black transition-all duration-200 hover:scale-105 cursor-pointer"
+                        >
+                            GET IN TOUCH →
+                        </a>
+                        <a
+                            href="/"
+                            class="font-black text-lg tracking-widest border-4 border-white px-8 py-4 text-white hover:bg-white hover:text-black transition-all duration-200 hover:scale-105 cursor-pointer"
+                        >
+                            ← BACK TO SITE
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        {/* FOOTER */}
+        <footer
+            class="border-t-4 border-black bg-[#BF3235] px-4 py-6 relative z-10"
+        >
+            <div
+                class="flex flex-col md:flex-row items-center justify-between gap-4"
+            >
+                <span class="font-black text-2xl tracking-tighter"
+                    >FRN.Q / LAB</span
+                >
+                <div class="flex items-center gap-6">
+                    <span class="font-mono text-xs font-bold tracking-widest"
+                        >{new Date().getFullYear()}</span
+                    >
+                    <span class="w-2 h-2 bg-black animate-pulse rounded-full"
+                    ></span>
+                    <span class="font-mono text-xs font-bold tracking-widest"
+                        >NO RIGHTS RESERVED</span
+                    >
+                </div>
+            </div>
+        </footer>
+
+        {/* ANIMATION KEYFRAMES */}
+        <style>
+            @keyframes noiseShift {
+                0%,
+                100% {
+                    transform: translate(0, 0);
+                }
+                25% {
+                    transform: translate(-2%, -2%);
+                }
+                50% {
+                    transform: translate(2%, 1%);
+                }
+                75% {
+                    transform: translate(-1%, 2%);
+                }
+            }
+
+            @keyframes scanMove {
+                0% {
+                    background-position: 0 0;
+                }
+                100% {
+                    background-position: 0 100vh;
+                }
+            }
+
+            @keyframes ticker {
+                0% {
+                    transform: translateX(0);
+                }
+                100% {
+                    transform: translateX(-50%);
+                }
+            }
+
+            @keyframes float0 {
+                0%,
+                100% {
+                    transform: translateY(0) rotate(-20deg);
+                }
+                50% {
+                    transform: translateY(-30px) rotate(-15deg);
+                }
+            }
+
+            @keyframes float1 {
+                0%,
+                100% {
+                    transform: translateY(0) rotate(0deg);
+                }
+                50% {
+                    transform: translateY(20px) rotate(5deg);
+                }
+            }
+
+            @keyframes float2 {
+                0%,
+                100% {
+                    transform: translateY(0) rotate(20deg);
+                }
+                50% {
+                    transform: translateY(-20px) rotate(25deg);
+                }
+            }
+
+            @keyframes glitch1 {
+                0%,
+                100% {
+                    clip-path: inset(0 0 95% 0);
+                    transform: translate(-3px, 0);
+                }
+                20% {
+                    clip-path: inset(30% 0 50% 0);
+                    transform: translate(3px, 0);
+                }
+                40% {
+                    clip-path: inset(60% 0 20% 0);
+                    transform: translate(-3px, 0);
+                }
+                60% {
+                    clip-path: inset(10% 0 70% 0);
+                    transform: translate(3px, 0);
+                }
+                80% {
+                    clip-path: inset(80% 0 5% 0);
+                    transform: translate(-3px, 0);
+                }
+            }
+
+            @keyframes glitch2 {
+                0%,
+                100% {
+                    clip-path: inset(95% 0 0 0);
+                    transform: translate(3px, 0);
+                }
+                20% {
+                    clip-path: inset(50% 0 30% 0);
+                    transform: translate(-3px, 0);
+                }
+                40% {
+                    clip-path: inset(20% 0 60% 0);
+                    transform: translate(3px, 0);
+                }
+                60% {
+                    clip-path: inset(70% 0 10% 0);
+                    transform: translate(-3px, 0);
+                }
+                80% {
+                    clip-path: inset(5% 0 80% 0);
+                    transform: translate(3px, 0);
+                }
+            }
+
+            @keyframes cornerPulse {
+                0%,
+                100% {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+                50% {
+                    opacity: 0.5;
+                    transform: scale(0.95);
+                }
+            }
+
+            @keyframes flashOut {
+                0% {
+                    opacity: 1;
+                }
+                100% {
+                    opacity: 0;
+                }
+            }
+
+            @keyframes letterShake {
+                0%,
+                100% {
+                    transform: translateX(0);
+                }
+                25% {
+                    transform: translateX(-2px);
+                }
+                75% {
+                    transform: translateX(2px);
+                }
+            }
+
+            .animate-ticker {
+                animation: ticker 20s linear infinite;
+            }
+
+            .glitch-letter {
+                position: relative;
+                display: inline-block;
+                transition:
+                    mix-blend-mode 0.2s ease,
+                    color 0.2s ease;
+                will-change: transform;
+            }
+
+            /* Invert effect when cursor is near */
+            .glitch-letter.invert {
+                mix-blend-mode: difference;
+                color: white !important;
+            }
+
+            .glitch-letter::before,
+            .glitch-letter::after {
+                content: attr(data-text);
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+
+            .glitch-letter::before {
+                animation: glitch1 0.3s infinite linear alternate-reverse;
+                color: white;
+                z-index: -1;
+            }
+
+            .glitch-letter::after {
+                animation: glitch2 0.3s infinite linear alternate-reverse;
+                color: black;
+                z-index: -2;
+                opacity: 0.5;
+            }
+
+            .glitch-offset-1 {
+                animation: letterShake 0.1s infinite;
+            }
+
+            .glitch-offset-2 {
+                animation: letterShake 0.15s infinite reverse;
+            }
+
+            .animate-corner {
+                animation: cornerPulse 2s ease-in-out infinite;
+            }
+
+            #flash {
+                animation: flashOut 0.5s ease-out forwards;
+            }
+
+            /* Custom scrollbar - LAB style */
+            ::-webkit-scrollbar {
+                width: 16px;
+            }
+
+            ::-webkit-scrollbar-track {
+                background: #bf3235;
+                border-left: 4px solid black;
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background: black;
+                border: 2px solid #bf3235;
+            }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: white;
+            }
+
+            .experiment-card.is-visible {
+                opacity: 1;
+                animation: cardEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            }
+
+            @keyframes cardEnter {
+                from {
+                    opacity: 0;
+                    transform: translateY(100px)
+                        rotate(calc(var(--rotation) * 2));
+                }
+                to {
+                    opacity: 1;
+                    transform: rotate(var(--rotation));
+                }
+            }
+
+            /* Hover effect for letters - Scale instead of color change */
+            .hover-letter-lab {
+                transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+                display: inline-block;
+            }
+
+            .hover-letter-lab:hover {
+                transform: scale(1.15) translateY(-5px);
+            }
+
+            /* Hide default cursor on lab page */
+            @media (min-width: 768px) {
+                #lab-page,
+                #lab-page * {
+                    cursor: none !important;
+                }
+            }
+        </style>
+
+        {/* SCRIPTS */}
+        <script>
+            (function () {
+                // Custom cursor for LAB
+                const cursor = document.getElementById("lab-cursor-dot");
+                const ring = document.getElementById("lab-cursor-ring");
+
+                if (!cursor || !ring) return;
+
+                // Show cursor immediately with proper initial state
+                cursor.style.opacity = "1";
+                ring.style.opacity = "1";
+                cursor.style.left = "50%";
+                cursor.style.top = "50%";
+                ring.style.left = "50%";
+                ring.style.top = "50%";
+
+                let mouseX = window.innerWidth / 2;
+                let mouseY = window.innerHeight / 2;
+                let cursorX = mouseX;
+                let cursorY = mouseY;
+                let ringX = mouseX;
+                let ringY = mouseY;
+
+                let rafId = null;
+                let isActive = true;
+
+                function updateCursor() {
+                    if (!isActive) return;
+
+                    // Cursor dot follows with slight smoothing
+                    cursorX += (mouseX - cursorX) * 0.25;
+                    cursorY += (mouseY - cursorY) * 0.25;
+                    cursor.style.left = cursorX + "px";
+                    cursor.style.top = cursorY + "px";
+
+                    // Ring follows with more delay for trailing effect
+                    ringX += (mouseX - ringX) * 0.12;
+                    ringY += (mouseY - ringY) * 0.12;
+                    ring.style.left = ringX + "px";
+                    ring.style.top = ringY + "px";
+
+                    rafId = requestAnimationFrame(updateCursor);
+                }
+
+                // Start cursor animation immediately
+                rafId = requestAnimationFrame(updateCursor);
+
+                document.addEventListener(
+                    "mousemove",
+                    (e) => {
+                        mouseX = e.clientX;
+                        mouseY = e.clientY;
+                    },
+                    { passive: true },
+                );
+
+                // Handle visibility change
+                document.addEventListener("visibilitychange", () => {
+                    if (document.hidden) {
+                        isActive = false;
+                        if (rafId) cancelAnimationFrame(rafId);
+                    } else {
+                        isActive = true;
+                        rafId = requestAnimationFrame(updateCursor);
+                    }
+                });
+
+                // Hover effects
+                document
+                    .querySelectorAll(
+                        "a, button, .experiment-card, .hover-letter-lab",
+                    )
+                    .forEach((el) => {
+                        el.addEventListener("mouseenter", () => {
+                            ring.style.transform = "translate(-50%, -50%) scale(1.8)";
+                            ring.style.borderWidth = "3px";
+                            cursor.style.transform = "translate(-50%, -50%) scale(1.5)";
+                        });
+                        el.addEventListener("mouseleave", () => {
+                            ring.style.transform = "translate(-50%, -50%) scale(1)";
+                            ring.style.borderWidth = "2px";
+                            cursor.style.transform = "translate(-50%, -50%) scale(1)";
+                        });
+                    });
+
+                // Intersection Observer for experiment cards
+                const observer = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach((entry) => {
+                            if (entry.isIntersecting) {
+                                const index = parseInt(
+                                    entry.target.dataset.index || "0",
+                                );
+                                setTimeout(() => {
+                                    entry.target.classList.add("is-visible");
+                                }, index * 80);
+                                observer.unobserve(entry.target);
+                            }
+                        });
+                    },
+                    { threshold: 0.1, rootMargin: "-50px" },
+                );
+
+                document
+                    .querySelectorAll(".experiment-card")
+                    .forEach((card) => {
+                        observer.observe(card);
+                    });
+
+                // Random glitch effect on LAB letters
+                setInterval(() => {
+                    const letters = document.querySelectorAll(".glitch-letter");
+                    const randomLetter = letters[Math.floor(Math.random() * letters.length)];
+                    if (randomLetter) {
+                        const offset = Math.random() * 6 - 3;
+                        randomLetter.style.transform = "translateX(" + offset + "px)";
+                        setTimeout(() => {
+                            randomLetter.style.transform = "translateX(0)";
+                        }, 100);
+                    }
+                }, 2000);
+            })();
+        </script>
+    </div>
+</Layout>

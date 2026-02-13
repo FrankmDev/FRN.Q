@@ -1,11 +1,80 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+import Navigation from "../components/layout/Navigation.astro";
+import Footer from "../components/layout/Footer.astro";
+import Preloader from "../components/effects/Preloader.astro";
+import CustomCursor from "../components/effects/CustomCursor.astro";
+import GrainOverlay from "../components/effects/GrainOverlay.astro";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Hero from "../sections/home/Hero.astro";
+import SelectedWorks from "../sections/home/SelectedWorks.astro";
+import About from "../sections/home/About.astro";
+import Services from "../sections/home/Services.astro";
+import MassiveStudios from "../sections/home/MassiveStudios.astro";
+
+import heroVisual from "../assets/hero-visual.jpg";
 ---
 
 <Layout>
-	<Welcome />
+    {/* Effects - Outside main content to be visible during preloader */}
+    <Preloader />
+    <CustomCursor />
+    <GrainOverlay />
+
+    {/* Main Content */}
+    <div id="main-content" class="opacity-0 transition-opacity duration-500">
+        <Navigation currentPath="/" />
+        <Hero heroVisual={heroVisual.src} />
+
+        {/* Divider Image with enhanced parallax */}
+        <div class="w-full h-[40vh] md:h-[50vh] overflow-hidden">
+            <img
+                src={heroVisual.src}
+                alt=""
+                class="w-full h-full object-cover animate-parallax"
+                loading="lazy"
+            />
+        </div>
+
+        <SelectedWorks />
+        <About />
+        <Services />
+        <MassiveStudios />
+        <Footer />
+    </div>
 </Layout>
+
+<style>
+    .parallax-img {
+        will-change: transform;
+    }
+</style>
+
+<script>
+    // Parallax for divider image
+    const parallaxImg = document.querySelector(".parallax-img");
+    if (parallaxImg) {
+        let ticking = false;
+
+        window.addEventListener(
+            "scroll",
+            () => {
+                if (!ticking) {
+                    requestAnimationFrame(() => {
+                        const rect = (
+                            parallaxImg as HTMLElement
+                        ).getBoundingClientRect();
+                        const scrollProgress =
+                            -rect.top / (window.innerHeight + rect.height);
+                        const yOffset = scrollProgress * 20 - 10;
+                        (parallaxImg as HTMLElement).style.transform =
+                            `translateY(${yOffset}%) scale(1.1)`;
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            },
+            { passive: true },
+        );
+    }
+</script>

@@ -1,0 +1,334 @@
+---
+import { navItems } from "../../data/navigation";
+import { siteConfig } from "../../data/site";
+
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = "/" } = Astro.props;
+const logoLetters = siteConfig.name.split("");
+---
+
+<nav
+  id="main-nav"
+  class="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b-2 border-foreground"
+>
+  <div class="px-6 lg:px-12 py-5 flex items-center justify-between">
+    {/* Logo - Animated letters */}
+    <a href="/" class="nav-logo group flex" data-cursor="HOME">
+      {
+        logoLetters.map((letter, i) => (
+          <span
+            class={`nav-logo-letter inline-block font-black text-xl lg:text-2xl tracking-tight ${letter === "." ? "text-accent" : "text-foreground group-hover:text-accent"}`}
+            data-index={i}
+            style={`transition-delay: ${i * 30}ms`}
+          >
+            {letter}
+          </span>
+        ))
+      }
+    </a>
+
+    {/* Desktop Navigation */}
+    <div class="hidden md:flex items-center gap-8 lg:gap-12">
+      {
+        navItems.map((item, i) => (
+          <a
+            href={item.path}
+            data-cursor={item.cursor}
+            class={`nav-link group relative font-mono text-sm lg:text-base tracking-[0.3em] uppercase font-black transition-colors duration-200 ${
+              currentPath === item.path ? "text-accent" : "text-foreground"
+            }`}
+            data-index={i}
+          >
+            <span class="relative z-10">{item.label}</span>
+
+            {/* Hover background */}
+            <div class="absolute inset-0 -inset-x-4 -inset-y-2 bg-foreground scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
+
+            {/* Text on hover */}
+            <span class="absolute inset-0 -inset-x-4 -inset-y-2 flex items-center justify-center text-background opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-black">
+              {item.label}
+            </span>
+          </a>
+        ))
+      }
+    </div>
+
+    {/* Mobile Menu Button */}
+    <button
+      id="mobile-menu-btn"
+      class="md:hidden w-12 h-12 border-4 border-foreground flex flex-col justify-center items-center gap-2 hover:bg-foreground hover:border-accent group transition-all duration-300"
+      aria-label="Toggle menu"
+      data-cursor="MENU"
+    >
+      <span
+        class="menu-line w-6 h-1 bg-foreground group-hover:bg-background transition-colors duration-300"
+      ></span>
+      <span
+        class="menu-line w-6 h-1 bg-foreground group-hover:bg-background transition-colors duration-300"
+      ></span>
+    </button>
+  </div>
+
+  {/* Mobile Menu */}
+  <div
+    id="mobile-menu"
+    class="md:hidden fixed inset-0 top-[62px] bg-background border-t-2 border-foreground transform translate-x-full transition-transform duration-500 ease-out"
+  >
+    <div class="px-6 py-12 space-y-6">
+      {
+        navItems.map((item, i) => (
+          <a
+            href={item.path}
+            class={`mobile-nav-link block font-display font-black text-4xl uppercase ${
+              currentPath === item.path
+                ? "text-accent"
+                : "text-foreground hover:text-accent"
+            } transition-colors duration-300`}
+            data-index={i}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </div>
+
+    {/* Mobile menu footer */}
+    <div
+      class="absolute bottom-0 left-0 right-0 border-t-[6px] border-foreground px-6 py-6"
+    >
+      <a
+        href={`mailto:${siteConfig.email}`}
+        class="font-mono text-sm font-bold text-foreground hover:text-accent uppercase tracking-wider"
+      >
+        {siteConfig.email}
+      </a>
+    </div>
+  </div>
+</nav>
+
+<style>
+  /* Logo letter initial state and hover */
+  .nav-logo-letter {
+    opacity: 0;
+    transform: translateY(-30px);
+    transition:
+      transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+      color 0.3s ease;
+  }
+
+  .nav-logo:hover .nav-logo-letter {
+    transform: translateY(-3px);
+  }
+
+  /* Nav link initial state and positioning */
+  .nav-link {
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  /* Mobile button initial state */
+  #mobile-menu-btn {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  /* Mobile menu lines animation */
+  #mobile-menu.open ~ #mobile-menu-btn .menu-line:first-child {
+    transform: rotate(45deg) translateY(6px);
+  }
+
+  #mobile-menu.open ~ #mobile-menu-btn .menu-line:last-child {
+    transform: rotate(-45deg) translateY(-6px);
+  }
+
+  /* Mobile menu open state */
+  #mobile-menu.open {
+    transform: translateX(0);
+  }
+
+  /* Mobile nav links initial state */
+  .mobile-nav-link {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+
+  #mobile-menu.open .mobile-nav-link {
+    animation: slideInRight 0.5s ease-out forwards;
+  }
+
+  #mobile-menu.open .mobile-nav-link:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  #mobile-menu.open .mobile-nav-link:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  #mobile-menu.open .mobile-nav-link:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  #mobile-menu.open .mobile-nav-link:nth-child(4) {
+    animation-delay: 0.4s;
+  }
+
+  @keyframes slideInRight {
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+</style>
+
+<script>
+  console.log("[Navigation] Script loaded");
+
+  // Mobile menu toggle
+  const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  if (mobileMenuBtn && mobileMenu) {
+    mobileMenuBtn.addEventListener("click", () => {
+      mobileMenu.classList.toggle("open");
+
+      // Update aria label
+      const isOpen = mobileMenu.classList.contains("open");
+      mobileMenuBtn.setAttribute(
+        "aria-label",
+        isOpen ? "Close menu" : "Open menu",
+      );
+    });
+
+    // Close menu when clicking a link
+    const mobileLinks = mobileMenu.querySelectorAll("a");
+    mobileLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        mobileMenu.classList.remove("open");
+      });
+    });
+
+    // Close menu on escape key
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && mobileMenu.classList.contains("open")) {
+        mobileMenu.classList.remove("open");
+      }
+    });
+  }
+
+  // GSAP animations
+  function animateNav() {
+    if (typeof window.gsap === "undefined") {
+      console.log("[Navigation] GSAP not ready, waiting...");
+      setTimeout(animateNav, 50);
+      return;
+    }
+
+    const gsap = window.gsap;
+    console.log("[Navigation] Starting animations");
+
+    // Logo letters entrance - using gsap.to() to avoid conflicts
+    const logoLetters = document.querySelectorAll(".nav-logo-letter");
+    if (logoLetters.length > 0) {
+      gsap.to(logoLetters, {
+        y: 0,
+        opacity: 1,
+        duration: 0.6,
+        stagger: 0.05,
+        ease: "back.out(1.4)",
+        delay: 0.2,
+      });
+    }
+
+    // Nav links entrance
+    const navLinks = document.querySelectorAll(".nav-link");
+    if (navLinks.length > 0) {
+      gsap.to(navLinks, {
+        y: 0,
+        opacity: 1,
+        duration: 0.5,
+        stagger: 0.1,
+        ease: "power2.out",
+        delay: 0.5,
+      });
+    }
+
+    // Mobile button entrance
+    const mobileBtn = document.getElementById("mobile-menu-btn");
+    if (mobileBtn) {
+      gsap.to(mobileBtn, {
+        scale: 1,
+        opacity: 1,
+        duration: 0.4,
+        ease: "back.out(1.7)",
+        delay: 0.6,
+      });
+    }
+
+    // Scroll effect - hide/show nav
+    let lastScroll = 0;
+    const nav = document.getElementById("main-nav");
+
+    if (nav) {
+      window.addEventListener(
+        "scroll",
+        () => {
+          const currentScroll = window.pageYOffset;
+
+          if (currentScroll <= 0) {
+            nav.style.transform = "translateY(0)";
+          } else if (currentScroll > lastScroll && currentScroll > 100) {
+            // Scrolling down
+            nav.style.transform = "translateY(-100%)";
+          } else {
+            // Scrolling up
+            nav.style.transform = "translateY(0)";
+          }
+
+          lastScroll = currentScroll;
+        },
+        { passive: true },
+      );
+
+      nav.style.transition = "transform 0.3s ease-out";
+    }
+
+    console.log("[Navigation] Animations initialized");
+  }
+
+  // Start animations
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", animateNav);
+  } else {
+    animateNav();
+  }
+
+  // Fallback timeout - show nav if GSAP doesn't load
+  setTimeout(() => {
+    const logoLetters = document.querySelectorAll(".nav-logo-letter") as NodeListOf<HTMLElement>;
+    const navLinks = document.querySelectorAll(".nav-link") as NodeListOf<HTMLElement>;
+    const mobileBtn = document.getElementById("mobile-menu-btn") as HTMLElement;
+
+    logoLetters.forEach((letter) => {
+      if (window.getComputedStyle(letter).opacity === "0") {
+        letter.style.opacity = "1";
+        letter.style.transform = "translateY(0)";
+      }
+    });
+
+    navLinks.forEach((link) => {
+      if (window.getComputedStyle(link).opacity === "0") {
+        link.style.opacity = "1";
+        link.style.transform = "translateY(0)";
+      }
+    });
+
+    if (mobileBtn && window.getComputedStyle(mobileBtn).opacity === "0") {
+      mobileBtn.style.opacity = "1";
+      mobileBtn.style.transform = "scale(1)";
+    }
+
+    console.log("[Navigation] Fallback timeout executed");
+  }, 2000);
+</script>

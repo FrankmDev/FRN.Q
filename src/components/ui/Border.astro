@@ -1,0 +1,24 @@
+---
+/**
+ * Border Component - Consistent border styling
+ */
+
+interface Props {
+  side?: "all" | "top" | "bottom" | "left" | "right";
+  class?: string;
+}
+
+const { side = "all", class: className = "" } = Astro.props;
+
+const sideClasses = {
+  all: "border-thin",
+  top: "border-thin-t",
+  bottom: "border-thin-b",
+  left: "border-thin-l",
+  right: "border-thin-r",
+};
+---
+
+<div class={`${sideClasses[side]} ${className}`}>
+  <slot />
+</div>

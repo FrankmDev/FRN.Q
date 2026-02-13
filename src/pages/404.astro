@@ -1,0 +1,49 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const title = "404 — Not Found";
+const description = "Page not found";
+---
+
+<Layout title={title} description={description}>
+    <div
+        class="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden"
+    >
+        <div class="text-center relative z-10">
+            <h1
+                class="font-display font-black text-foreground mb-4"
+                style={{
+                    fontSize: "clamp(6rem, 20vw, 15rem)",
+                    lineHeight: 0.85,
+                }}
+            >
+                404
+            </h1>
+            <p
+                class="font-mono text-sm text-muted-foreground mb-8 tracking-wider"
+            >
+                PAGE NOT FOUND
+            </p>
+            <a
+                href="/"
+                class="inline-flex items-center gap-2 font-mono text-xs tracking-wider text-foreground hover:text-accent transition-colors border-thin px-6 py-3"
+            >
+                <span>←</span>
+                <span>BACK TO INDEX</span>
+            </a>
+        </div>
+
+        {/* Decorative Grid */}
+        <div
+            class="absolute inset-0 pointer-events-none opacity-5"
+            style={{
+                backgroundImage: `
+          linear-gradient(to right, hsl(var(--foreground)) 1px, transparent 1px),
+          linear-gradient(to bottom, hsl(var(--foreground)) 1px, transparent 1px)
+        `,
+                backgroundSize: "50px 50px",
+            }}
+        >
+        </div>
+    </div>
+</Layout>

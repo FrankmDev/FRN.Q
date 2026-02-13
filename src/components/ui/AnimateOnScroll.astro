@@ -1,0 +1,85 @@
+---
+/**
+ * AnimateOnScroll Component - Wrapper for scroll-triggered animations
+ */
+
+interface Props {
+  animation?: "fade-up" | "slide-up" | "scale" | "fade-in";
+  delay?: number;
+  threshold?: number;
+  class?: string;
+}
+
+const {
+  animation = "fade-up",
+  delay = 0,
+  threshold = 0.1,
+  class: className = "",
+} = Astro.props;
+
+const uniqueId = Math.random().toString(36).substring(2, 9);
+---
+
+<div
+  class={`animate-on-scroll ${className}`}
+  data-animation={animation}
+  data-threshold={threshold}
+  data-id={uniqueId}
+  style={delay ? `transition-delay: ${delay}ms;` : undefined}
+>
+  <slot />
+</div>
+
+<style>
+  .animate-on-scroll {
+    opacity: 0;
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .animate-on-scroll[data-animation="fade-up"] {
+    transform: translateY(60px);
+  }
+
+  .animate-on-scroll[data-animation="slide-up"] {
+    transform: translateY(110%);
+  }
+
+  .animate-on-scroll[data-animation="scale"] {
+    transform: scale(1.15);
+  }
+
+  .animate-on-scroll.is-visible {
+    opacity: 1;
+    transform: translate(0) scale(1);
+  }
+</style>
+
+<script>
+  // Intersection Observer for scroll animations
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: "-80px",
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  // Observe all elements on page load
+  document.querySelectorAll(".animate-on-scroll").forEach((el) => {
+    observer.observe(el);
+  });
+
+  // Re-observe after view transitions
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll(".animate-on-scroll").forEach((el) => {
+      observer.observe(el);
+    });
+  });
+</script>

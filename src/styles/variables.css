@@ -1,0 +1,47 @@
+/* Design Tokens & CSS Variables */
+
+:root {
+    /* Colors - HSL format for Tailwind compatibility */
+    --background: 0 0% 2%;
+    --foreground: 0 0% 96%;
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 96%;
+    --popover: 0 0% 4%;
+    --popover-foreground: 0 0% 96%;
+    --primary: 0 0% 96%;
+    --primary-foreground: 0 0% 2%;
+    --secondary: 0 0% 8%;
+    --secondary-foreground: 0 0% 96%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 50%;
+    --accent: 0 58% 47%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 96%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 0 0% 96%;
+
+    /* Radius */
+    --radius: 0px;
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 4%;
+    --sidebar-foreground: 0 0% 96%;
+    --sidebar-primary: 0 0% 96%;
+    --sidebar-primary-foreground: 0 0% 2%;
+    --sidebar-accent: 0 0% 8%;
+    --sidebar-accent-foreground: 0 0% 96%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 0 0% 96%;
+
+    /* Custom tokens */
+    --border-thin: 0.5px solid hsl(0 0% 20%);
+    --font-display:
+        "Inter Tight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-mono: "JetBrains Mono", "SF Mono", "Fira Code", monospace;
+
+    /* Lab theme overrides */
+    --lab-background: 0 58% 47%;
+    --lab-foreground: 0 0% 0%;
+}

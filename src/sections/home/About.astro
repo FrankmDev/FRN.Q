@@ -1,0 +1,268 @@
+---
+const titleLetters = "ABOUT".split("");
+const technologies = ["ASTRO", "NEXT.JS", "GSAP", "FRAMER", "ELEMENTOR"];
+---
+
+<section id="about" class="relative bg-background">
+  
+  {/* HEADER */}
+  <header class="relative border-b border-foreground/10">
+    {/* Top accent line */}
+    <div class="h-1 bg-accent"></div>
+    
+    {/* Section bar */}
+    <div class="px-6 lg:px-16 py-4 flex justify-between items-center border-b border-foreground/10">
+      <div class="flex items-center gap-3">
+        <div class="w-2 h-2 bg-accent"></div>
+        <span class="font-mono text-[10px] tracking-[0.5em] text-muted-foreground uppercase">Section</span>
+      </div>
+      <span class="about-section-num font-black text-4xl lg:text-5xl text-foreground/20">
+        01
+      </span>
+    </div>
+
+    {/* Main header content */}
+    <div class="px-6 lg:px-16 pt-16 lg:pt-24 pb-12 lg:pb-16">
+      {/* Label */}
+      <div class="about-label-wrapper inline-flex items-center gap-3 mb-8 px-4 py-2 border border-foreground/20">
+        <div class="w-1.5 h-1.5 bg-accent"></div>
+        <span class="about-label font-mono text-[10px] tracking-[0.4em] text-foreground uppercase">
+          Who I Am
+        </span>
+      </div>
+
+      {/* Title and Meta */}
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 lg:gap-16">
+        {/* Title */}
+        <div>
+          <h2 class="about-title font-black text-foreground leading-[0.8] tracking-tighter" style="font-size: clamp(6rem, 20vw, 18rem);">
+            {
+              titleLetters.map((letter, i) => (
+                <span class="about-letter inline-block" data-index={i}>
+                  {letter}
+                </span>
+              ))
+            }
+          </h2>
+          {/* Description */}
+          <div class="mt-6 lg:mt-8 max-w-2xl">
+            <p class="about-desc text-lg lg:text-xl text-foreground font-black uppercase leading-[1.1] tracking-tight">
+              Creative developer building <span class="text-accent">digital experiences</span> that merge technical excellence with visual impact.
+            </p>
+          </div>
+        </div>
+
+        {/* Meta */}
+        <div class="about-meta flex items-center gap-8 lg:gap-12 pb-2">
+          {/* Years */}
+          <div class="about-meta-item">
+            <span class="font-mono text-[10px] tracking-[0.4em] text-muted-foreground uppercase block mb-2">
+              Experience
+            </span>
+            <span class="font-black text-5xl lg:text-6xl text-foreground leading-none">
+              03
+            </span>
+          </div>
+          
+          {/* CTA */}
+          <a 
+            href="#contact" 
+            class="about-cta-link group inline-flex items-center gap-3 font-mono text-xs tracking-[0.2em] uppercase border-2 border-foreground px-5 py-3 hover:bg-foreground hover:text-background transition-all duration-300"
+          >
+            <span>Contact</span>
+            <span class="link-arrow transform group-hover:translate-x-1 transition-transform">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  {/* STATS - BRUTALIST GRID */}
+  <div class="border-b border-foreground/10">
+    <div class="grid grid-cols-2 lg:grid-cols-4">
+      {[
+        { label: "Experience", value: "03", sub: "Years", accent: true },
+        { label: "Code Projects", value: "08", sub: "Completed", accent: false },
+        { label: "Elementor", value: "200+", sub: "Projects", accent: true },
+        { label: "Stack", value: "05", sub: "Technologies", accent: false }
+      ].map((stat, i) => (
+        <div class={`about-stat group relative overflow-hidden ${i < 3 ? 'border-r border-foreground/10' : ''} ${i < 2 ? 'border-b lg:border-b-0 border-foreground/10' : ''}`}>
+          {/* Hover fill effect */}
+          <div class="absolute inset-0 bg-accent origin-bottom scale-y-0 group-hover:scale-y-100 transition-transform duration-500 ease-out"></div>
+          
+          <div class="relative z-10 px-6 lg:px-8 py-10 lg:py-14">
+            {/* Top accent bar */}
+            <div class={`h-1 w-12 mb-6 ${stat.accent ? 'bg-accent' : 'bg-foreground/30'} group-hover:bg-foreground transition-colors duration-300`}></div>
+            
+            {/* Label */}
+            <span class="font-mono text-[10px] tracking-[0.5em] text-muted-foreground uppercase block mb-4 group-hover:text-foreground/70 transition-colors duration-300">
+              {stat.label}
+            </span>
+            
+            {/* Value - MASSIVE */}
+            <span class="about-stat-number font-black text-5xl sm:text-6xl lg:text-7xl xl:text-8xl text-foreground group-hover:text-background leading-none tracking-tighter block transition-colors duration-300">
+              {stat.value}
+            </span>
+            
+            {/* Sub label */}
+            <span class="font-mono text-xs text-muted-foreground uppercase tracking-wider block mt-3 group-hover:text-foreground/70 transition-colors duration-300">
+              {stat.sub}
+            </span>
+            
+            {/* Decorative corner */}
+            <div class="absolute top-4 right-4 w-2 h-2 border-t border-r border-foreground/20 group-hover:border-background/40 transition-colors duration-300"></div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  {/* CONTENT */}
+  <div class="px-6 lg:px-16 py-16 lg:py-20">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+      {/* LEFT */}
+      <div class="about-section">
+        <div class="flex gap-6">
+          <div class="w-1 bg-accent shrink-0"></div>
+          <div>
+            <span class="font-mono text-[10px] tracking-[0.4em] text-muted-foreground uppercase block mb-4">
+              Background
+            </span>
+            <h3 class="font-display font-black text-2xl lg:text-4xl text-foreground uppercase leading-tight mb-5">
+              Frontend Specialist
+            </h3>
+            <p class="text-base lg:text-lg text-foreground/80 leading-relaxed mb-6">
+              Specializing in creative frontend development, interactive experiences, and modern web applications that captivate and convert.
+            </p>
+            <div class="flex flex-wrap gap-2">
+              {["React", "Astro", "TypeScript", "GSAP"].map(tech => (
+                <span class="font-mono text-xs tracking-wider uppercase border border-foreground/30 px-3 py-1.5 hover:bg-foreground hover:text-background transition-all duration-300 cursor-default">
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* RIGHT */}
+      <div class="about-section">
+        <div class="flex gap-6">
+          <div class="w-1 bg-foreground shrink-0"></div>
+          <div class="flex-1">
+            <span class="font-mono text-[10px] tracking-[0.4em] text-muted-foreground uppercase block mb-6">
+              Tech Stack
+            </span>
+            
+            <div class="space-y-0">
+              {technologies.map((tech, i) => (
+                <div class="tech-item group py-4 border-b border-foreground/10 flex items-center justify-between hover:pl-2 transition-all duration-300 cursor-default">
+                  <div class="flex items-center gap-4">
+                    <span class="font-mono text-xs text-muted-foreground">
+                      0{i + 1}
+                    </span>
+                    <span class="font-display font-black text-xl lg:text-2xl uppercase">
+                      {tech}
+                    </span>
+                  </div>
+                  <div class="w-2 h-2 bg-foreground/20 group-hover:bg-accent transition-colors"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<style>
+  .about-stat {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  .about-section {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  .tech-item {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+</style>
+
+<script>
+  function animateAbout() {
+    if (typeof window.gsap === "undefined") {
+      setTimeout(animateAbout, 50);
+      return;
+    }
+
+    const gsap = window.gsap;
+
+    // Stats
+    gsap.to(".about-stat", {
+      y: 0,
+      opacity: 1,
+      duration: 0.6,
+      stagger: 0.08,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: ".about-stat",
+        start: "top 85%",
+        toggleActions: "play none none reverse",
+      },
+    });
+
+    // Sections
+    gsap.to(".about-section", {
+      y: 0,
+      opacity: 1,
+      duration: 0.9,
+      stagger: 0.15,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: ".about-section",
+        start: "top 80%",
+        toggleActions: "play none none reverse",
+      },
+    });
+
+    // Tech items
+    gsap.to(".tech-item", {
+      x: 0,
+      opacity: 1,
+      duration: 0.5,
+      stagger: 0.06,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: ".tech-item",
+        start: "top 85%",
+        toggleActions: "play none none reverse",
+      },
+    });
+
+    // CTA hover effect
+    const aboutCta = document.querySelector('.about-cta-link');
+    if (aboutCta) {
+      const arrow = aboutCta.querySelector('.link-arrow');
+      
+      aboutCta.addEventListener('mouseenter', () => {
+        if (arrow) gsap.to(arrow, { x: 6, duration: 0.3, ease: "power2.out" });
+      });
+      
+      aboutCta.addEventListener('mouseleave', () => {
+        if (arrow) gsap.to(arrow, { x: 0, duration: 0.3, ease: "power2.out" });
+      });
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", animateAbout);
+  } else {
+    animateAbout();
+  }
+</script>

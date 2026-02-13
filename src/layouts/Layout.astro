@@ -1,23 +1,73 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+import "../styles/globals.css";
+import { siteConfig } from "../data/site";
+import SmoothScroll from "../components/effects/SmoothScroll.astro";
+import GSAPAnimations from "../components/effects/GSAPAnimations.astro";
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+interface Props {
+    title?: string;
+    description?: string;
+    variant?: "default" | "lab";
+}
+
+const {
+    title = `${siteConfig.name} — ${siteConfig.tagline}`,
+    description = siteConfig.description,
+    variant = "default",
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || siteConfig.url);
+---
+
+<!doctype html>
+<html lang="en" class={variant === "lab" ? "lab-theme" : ""}>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content={description} />
+        <meta
+            name="theme-color"
+            content={variant === "lab" ? "#BF3235" : "#050505"}
+        />
+
+        <!-- Favicon -->
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+        <!-- Canonical -->
+        <link rel="canonical" href={canonicalURL} />
+
+        <!-- Open Graph -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={canonicalURL} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+
+        <!-- Twitter -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+
+        <title>{title}</title>
+
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+        <!-- GSAP -->
+        <script
+            is:inline
+            src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"
+        ></script>
+        <script
+            is:inline
+            src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"
+        ></script>
+    </head>
+    <body
+        class="min-h-screen bg-background text-foreground antialiased cursor-none"
+    >
+        <SmoothScroll />
+        <GSAPAnimations />
+        <slot />
+    </body>
+</html>

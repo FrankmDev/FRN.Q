@@ -1,0 +1,553 @@
+---
+import { siteConfig } from "../../data/site";
+
+const currentYear = new Date().getFullYear();
+const logoLetters = "FRN.Q".split("");
+---
+
+<footer id="main-footer" class="relative bg-background">
+  {/* SOCIAL & CONTACT - MASSIVE - KEEP EXACTLY AS IS */}
+  <div class="border-t-[6px] border-foreground">
+    <div class="px-6 lg:px-16 py-32 lg:py-40">
+      <div class="mb-12 lg:mb-16 text-right">
+        <span class="social-label font-mono text-[10px] tracking-[0.5em] text-muted-foreground uppercase">
+          [Social]
+        </span>
+      </div>
+
+      <div class="space-y-1 lg:space-y-2 text-right">
+        <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="social-link group block relative overflow-hidden">
+          <div class="absolute inset-0 bg-foreground origin-right scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out"></div>
+          <h3 class="relative font-black text-foreground group-hover:text-background leading-[0.85] tracking-tight transition-colors duration-300 py-1 lg:py-2" style="font-size: clamp(3rem, 10vw, 8rem);">
+            X
+          </h3>
+        </a>
+
+        <a href={`mailto:${siteConfig.email}`} class="social-link group block relative overflow-hidden">
+          <div class="absolute inset-0 bg-foreground origin-right scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out"></div>
+          <h3 class="relative font-black text-foreground group-hover:text-background leading-[0.85] tracking-tight transition-colors duration-300 py-1 lg:py-2" style="font-size: clamp(3rem, 10vw, 8rem);">
+            Email
+          </h3>
+        </a>
+
+        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="social-link group block relative overflow-hidden">
+          <div class="absolute inset-0 bg-foreground origin-right scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out"></div>
+          <h3 class="relative font-black text-foreground group-hover:text-background leading-[0.85] tracking-tight transition-colors duration-300 py-1 lg:py-2" style="font-size: clamp(3rem, 10vw, 8rem);">
+            LinkedIn
+          </h3>
+        </a>
+
+        <a href="https://behance.net" target="_blank" rel="noopener noreferrer" class="social-link group block relative overflow-hidden">
+          <div class="absolute inset-0 bg-foreground origin-right scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out"></div>
+          <h3 class="relative font-black text-foreground group-hover:text-background leading-[0.85] tracking-tight transition-colors duration-300 py-1 lg:py-2" style="font-size: clamp(3rem, 10vw, 8rem);">
+            Behance
+          </h3>
+        </a>
+
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-link group block relative overflow-hidden">
+          <div class="absolute inset-0 bg-foreground origin-right scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out"></div>
+          <h3 class="relative font-black text-foreground group-hover:text-background leading-[0.85] tracking-tight transition-colors duration-300 py-1 lg:py-2" style="font-size: clamp(3rem, 10vw, 8rem);">
+            Instagram
+          </h3>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  {/* EPIC EMAIL CTA SECTION - SPECIAL ANIMATION */}
+  <div id="email-cta-section" class="border-t-[6px] border-foreground bg-accent relative overflow-hidden">
+    <a href={`mailto:${siteConfig.email}`} class="email-cta-link block relative">
+      {/* Liquid fill effect */}
+      <div class="email-liquid-fill absolute inset-0 bg-foreground translate-y-[110%]"></div>
+      <div class="email-liquid-fill-2 absolute inset-0 bg-background translate-y-[110%]"></div>
+      
+      {/* Accent line animation */}
+      <div class="email-accent-line absolute bottom-0 left-0 h-1 bg-accent w-0"></div>
+      
+      <div class="relative px-6 lg:px-16 py-20 lg:py-32">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-8">
+          <div>
+            <span class="email-cta-label font-mono text-[10px] tracking-[0.5em] text-background/60 block mb-4 uppercase">
+              Let's Work Together
+            </span>
+            <h2 class="email-cta-text font-black text-background leading-[0.75] tracking-tight flex flex-wrap" style="font-size: clamp(3rem, 12vw, 10rem);">
+              {siteConfig.email.split('').map((char, i) => (
+                <span class="email-char inline-block" data-index={i} style="transform-style: preserve-3d;">{char}</span>
+              ))}
+            </h2>
+          </div>
+          
+          <div class="email-cta-icon-wrapper relative">
+            <div class="email-cta-icon w-20 h-20 border-4 border-background flex items-center justify-center transition-all duration-300">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-background email-icon-svg transition-transform duration-300">
+                <path d="M7 17L17 7M17 7H7M17 7V17" stroke-linecap="square" stroke-linejoin="miter"/>
+              </svg>
+            </div>
+            {/* Icon background fill */}
+            <div class="email-icon-bg absolute inset-0 bg-accent scale-0 origin-center"></div>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  {/* EPIC LOGO SECTION */}
+  <div class="border-t-[6px] border-foreground bg-foreground overflow-hidden relative">
+    {/* Diagonal stripes */}
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute inset-0" style="background: repeating-linear-gradient(45deg, transparent, transparent 20px, hsl(var(--background) 20px, hsl(var(--background)) 40px);"></div>
+    </div>
+    
+    <div class="relative z-10 px-6 lg:px-16 py-20 lg:py-28 flex flex-col items-center">
+      {/* Huge Logo */}
+      <div class="footer-logo-container overflow-hidden">
+        <h2 class="footer-logo-text font-black text-background leading-none tracking-tighter" style="font-size: clamp(6rem, 25vw, 20rem);">
+          {logoLetters.map((letter) => (
+            <span class="inline-block group-hover:translate-y-[-10%] transition-transform duration-300">{letter}</span>
+          ))}
+        </h2>
+      </div>
+      
+      {/* Tagline */}
+      <div class="footer-tagline mt-8 text-center">
+        <p class="font-mono text-xs tracking-[0.4em] text-background/50 uppercase">
+          Creative Developer — Based in Granada
+        </p>
+      </div>
+
+      {/* Decorative line */}
+      <div class="footer-decor-line w-32 h-1 bg-accent mt-8"></div>
+    </div>
+  </div>
+
+  {/* MINIMAL COPYRIGHT */}
+  <div class="border-t-[6px] border-foreground px-6 lg:px-16 py-5 bg-foreground">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <span class="copyright-text font-mono text-[10px] tracking-[0.3em] text-background uppercase">
+          © {currentYear} FRN.Q
+        </span>
+        <span class="w-1 h-1 bg-background/30"></span>
+        <span class="copyright-text font-mono text-[10px] tracking-[0.3em] text-background/50 uppercase">
+          All Rights Reserved
+        </span>
+      </div>
+      
+      <div class="flex items-center gap-3">
+        <span class="copyright-text font-mono text-[10px] tracking-[0.3em] text-accent uppercase">
+          Built with Astro
+        </span>
+        <span class="w-2 h-2 bg-accent"></span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .social-label,
+  .social-link,
+  .footer-info-item,
+  .footer-logo-text,
+  .footer-tagline,
+  .footer-decor,
+  .copyright-text {
+    opacity: 0;
+  }
+
+  .social-label {
+    transform: translateX(-20px);
+  }
+
+  .social-link {
+    transform: translateX(-80px);
+  }
+
+  .footer-info-item {
+    transform: translateY(40px);
+  }
+
+  .footer-info-label {
+    transform: translateY(10px);
+  }
+
+  .footer-info-value {
+    transform: translateY(15px);
+  }
+
+  .footer-logo-text {
+    transform: translateY(30px);
+  }
+
+  .footer-tagline {
+    transform: translateY(20px);
+  }
+
+  .footer-decor {
+    transform: scale(0.8);
+  }
+
+  .copyright-text {
+    transform: translateY(10px);
+  }
+
+  /* Email CTA special styles */
+  #email-cta-section {
+    perspective: 1000px;
+  }
+
+  .email-char {
+    display: inline-block;
+    backface-visibility: hidden;
+    will-change: transform;
+  }
+
+  .email-liquid-fill,
+  .email-liquid-fill-2 {
+    will-change: transform;
+  }
+
+  .email-cta-link {
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  console.log("[Footer] Script loaded");
+
+  function animateFooter() {
+    if (typeof window.gsap === "undefined" || typeof window.ScrollTrigger === "undefined") {
+      setTimeout(animateFooter, 50);
+      return;
+    }
+
+    const gsap = window.gsap;
+    const ScrollTrigger = window.ScrollTrigger;
+
+    // Social Label
+    const socialLabel = document.querySelector(".social-label");
+    if (socialLabel) {
+      gsap.to(socialLabel, {
+        opacity: 1,
+        x: 0,
+        duration: 0.8,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: socialLabel,
+          start: "top 90%",
+          toggleActions: "play none none reverse",
+        },
+      });
+    }
+
+    // Social Links - dramatic cascade from right
+    const socialLinks = document.querySelectorAll(".social-link");
+    if (socialLinks.length > 0) {
+      gsap.to(socialLinks, {
+        opacity: 1,
+        x: 0,
+        duration: 1.2,
+        stagger: 0.15,
+        ease: "power4.out",
+        scrollTrigger: {
+          trigger: socialLinks[0],
+          start: "top 85%",
+          toggleActions: "play none none reverse",
+        },
+      });
+    }
+
+    // Info Items - brutal stagger
+    const infoItems = document.querySelectorAll(".footer-info-item");
+    if (infoItems.length > 0) {
+      infoItems.forEach((item, i) => {
+        const label = item.querySelector(".footer-info-label");
+        const value = item.querySelector(".footer-info-value");
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: item,
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          },
+        });
+
+        tl.to(item, {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power3.out",
+        });
+
+        if (label) {
+          tl.to(label, {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            ease: "power2.out",
+          }, "-=0.4");
+        }
+
+        if (value) {
+          tl.to(value, {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            ease: "power2.out",
+          }, "-=0.3");
+        }
+      });
+    }
+
+    // Logo Text
+    const logoText = document.querySelector(".footer-logo-text");
+    if (logoText) {
+      gsap.to(logoText, {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: "power4.out",
+        scrollTrigger: {
+          trigger: logoText,
+          start: "top 90%",
+          toggleActions: "play none none reverse",
+        },
+      });
+    }
+
+    // Tagline
+    const tagline = document.querySelector(".footer-tagline");
+    if (tagline) {
+      gsap.to(tagline, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: tagline,
+          start: "top 90%",
+          toggleActions: "play none none reverse",
+        },
+      });
+    }
+
+    // Decor
+    const decor = document.querySelector(".footer-decor");
+    if (decor) {
+      gsap.to(decor, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.8,
+        ease: "back.out(1.7)",
+        scrollTrigger: {
+          trigger: decor,
+          start: "top 90%",
+          toggleActions: "play none none reverse",
+        },
+      });
+    }
+
+    // Copyright texts
+    const copyrightTexts = document.querySelectorAll(".copyright-text");
+    if (copyrightTexts.length > 0) {
+      gsap.to(copyrightTexts, {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: copyrightTexts[0],
+          start: "top 95%",
+          toggleActions: "play none none reverse",
+        },
+      });
+    }
+
+    console.log("[Footer] Animations initialized");
+
+    // SPECIAL EMAIL CTA HOVER - LETTER FLIP ANIMATION
+    const emailSection = document.getElementById('email-cta-section');
+    const emailLink = emailSection?.querySelector('.email-cta-link');
+    const emailLiquidFill = emailSection?.querySelector('.email-liquid-fill');
+    const emailLiquidFill2 = emailSection?.querySelector('.email-liquid-fill-2');
+    const emailAccentLine = emailSection?.querySelector('.email-accent-line');
+    const emailLabel = emailSection?.querySelector('.email-cta-label');
+    const emailChars = emailSection?.querySelectorAll('.email-char');
+    const emailIcon = emailSection?.querySelector('.email-icon-svg');
+    const emailIconBg = emailSection?.querySelector('.email-icon-bg');
+    const emailIconContainer = emailSection?.querySelector('.email-cta-icon');
+
+    if (emailLink && emailLiquidFill && emailLiquidFill2 && emailAccentLine && emailLabel && emailChars && emailIcon && emailIconBg && emailIconContainer) {
+      // Set initial perspective for 3D
+      gsap.set(emailChars, { 
+        transformPerspective: 1000,
+        transformOrigin: "center center"
+      });
+
+      // Hover IN - Cinematic letter animation
+      emailLink.addEventListener('mouseenter', () => {
+        const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+        
+        // Liquid fill rises smoothly
+        tl.to(emailLiquidFill, {
+          y: "0%",
+          duration: 0.6,
+          ease: "power2.inOut"
+        }, 0);
+        
+        // Second liquid layer with wave effect
+        tl.to(emailLiquidFill2, {
+          y: "0%",
+          duration: 0.5,
+          ease: "power2.inOut"
+        }, 0.15);
+        
+        // Accent line draws across
+        tl.to(emailAccentLine as Element, {
+          width: "100%",
+          duration: 0.8,
+          ease: "power2.out"
+        }, "+=0.2");
+        
+        // Label animation - crossfade
+        gsap.to(emailLabel, {
+          opacity: 0,
+          y: -10,
+          duration: 0.2,
+          onComplete: () => {
+            if (emailLabel) {
+              (emailLabel as HTMLElement).style.color = "#BF3235";
+              gsap.to(emailLabel, {
+                opacity: 1,
+                y: 0,
+                duration: 0.2
+              });
+            }
+          }
+        });
+        
+        // LETTERS FLIP ANIMATION - Staggered wave effect
+        const charArray = Array.from(emailChars);
+        const midIndex = Math.floor(charArray.length / 2);
+        
+        // Create wave from center
+        charArray.forEach((char, i) => {
+          const distanceFromCenter = Math.abs(i - midIndex);
+          const delay = 0.25 + (distanceFromCenter * 0.03);
+          const isEven = i % 2 === 0;
+          
+          gsap.to(char, {
+            rotationX: isEven ? 360 : -360,
+            scale: 1.1,
+            color: "#BF3235",
+            duration: 0.6,
+            delay: delay,
+            ease: "back.out(1.4)",
+            onComplete: () => {
+              gsap.to(char, {
+                scale: 1,
+                duration: 0.15,
+                ease: "power2.out"
+              });
+            }
+          });
+        });
+        
+        // Icon spins and transforms
+        tl.to(emailIcon, {
+          rotation: 45,
+          scale: 1.2,
+          duration: 0.4,
+          ease: "back.out(1.7)"
+        }, 0.5);
+        
+        // Icon background fills from center
+        tl.to(emailIconBg, {
+          scale: 1,
+          duration: 0.4,
+          ease: "back.out(1.7)"
+        }, 0.55);
+        
+        // Icon container border glow
+        tl.to(emailIconContainer, {
+          borderColor: "#050505",
+          boxShadow: "0 0 30px rgba(191, 50, 53, 0.5)",
+          duration: 0.3
+        }, 0.5);
+        
+        // Icon color to accent
+        tl.to(emailIcon, {
+          color: "#BF3235",
+          duration: 0.2
+        }, 0.6);
+      });
+
+      // Hover OUT - Smooth reverse
+      emailLink.addEventListener('mouseleave', () => {
+        // Stop any ongoing char animations
+        const charArray = Array.from(emailChars);
+        charArray.forEach((char, i) => {
+          gsap.killTweensOf(char);
+          gsap.to(char, {
+            rotationX: 0,
+            scale: 1,
+            color: "#050505",
+            duration: 0.4,
+            delay: i * 0.01,
+            ease: "power2.inOut"
+          });
+        });
+        
+        const tl = gsap.timeline({ defaults: { ease: "power2.inOut" } });
+        
+        // Liquid fills drop
+        tl.to(emailLiquidFill2, {
+          y: "110%",
+          duration: 0.35
+        }, 0);
+        
+        tl.to(emailLiquidFill, {
+          y: "110%",
+          duration: 0.35
+        }, 0.05);
+        
+        // Accent line retracts
+        tl.to(emailAccentLine, {
+          width: "0%",
+          duration: 0.3
+        }, 0);
+        
+        // Label returns
+        tl.to(emailLabel, {
+          color: "rgba(255,255,255,0.6)",
+          duration: 0.2
+        }, 0.2);
+        
+        // Icon returns
+        tl.to(emailIcon, {
+          rotation: 0,
+          scale: 1,
+          color: "#050505",
+          duration: 0.3
+        }, 0);
+        
+        tl.to(emailIconBg, {
+          scale: 0,
+          duration: 0.25
+        }, 0);
+        
+        tl.to(emailIconContainer, {
+          borderColor: "#050505",
+          boxShadow: "none",
+          duration: 0.2
+        }, 0);
+      });
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", animateFooter);
+  } else {
+    animateFooter();
+  }
+</script>

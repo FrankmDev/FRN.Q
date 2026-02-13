@@ -1,0 +1,178 @@
+---
+/**
+ * GSAPAnimations - Global animation initialization
+ * Simple, reliable GSAP animations without TypeScript
+ */
+---
+
+<style is:global>
+  /* NO usar opacity: 0 - causa problemas de visibilidad */
+  /* Las animaciones GSAP funcionan sobre elementos visibles */
+</style>
+
+<script is:inline>
+  // Wait for GSAP to be available
+  function initAnimations() {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+      setTimeout(initAnimations, 100);
+      return;
+    }
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    // ============================================
+    // HERO PARALLAX
+    // ============================================
+    const heroSection = document.getElementById('hero');
+    const heroContent = document.getElementById('hero-content');
+    
+    if (heroSection && heroContent) {
+      ScrollTrigger.create({
+        trigger: heroSection,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 1,
+        onUpdate: (self) => {
+          const progress = self.progress;
+          gsap.set(heroContent, { 
+            y: progress * 100,
+            opacity: 1 - progress 
+          });
+        }
+      });
+    }
+
+    // ============================================
+    // ABOUT SECTION ANIMATIONS
+    // ============================================
+    const aboutLetters = document.querySelectorAll('.about-letter');
+    if (aboutLetters.length > 0) {
+      gsap.from(aboutLetters, {
+        y: 100,
+        opacity: 0,
+        rotateX: -45,
+        duration: 0.8,
+        stagger: 0.05,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '.about-title',
+          start: 'top 80%',
+          toggleActions: 'play none none reverse'
+        }
+      });
+    }
+
+    // About text
+    const aboutText = document.querySelector('.about-text');
+    if (aboutText) {
+      gsap.from(aboutText, {
+        y: 50,
+        opacity: 0,
+        duration: 1,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: aboutText,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse'
+        }
+      });
+    }
+
+    // Tech tags
+    const techTags = document.querySelectorAll('.tech-tag');
+    if (techTags.length > 0) {
+      gsap.from(techTags, {
+        x: -30,
+        opacity: 0,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.about-tech',
+          start: 'top 85%',
+          toggleActions: 'play none none reverse'
+        }
+      });
+    }
+
+    // Contact
+    const aboutContact = document.querySelector('.about-contact');
+    if (aboutContact) {
+      gsap.from(aboutContact, {
+        x: 50,
+        opacity: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: aboutContact,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse'
+        }
+      });
+    }
+
+    // Services section is animated by its own component script
+    // ============================================
+    // SELECTED WORKS ANIMATIONS (Header only)
+    // ============================================
+    const worksHeader = document.querySelector('.works-header');
+    if (worksHeader) {
+      gsap.from(worksHeader, {
+        y: 60,
+        opacity: 0,
+        duration: 1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: worksHeader,
+          start: 'top 80%',
+          toggleActions: 'play none none reverse'
+        }
+      });
+    }
+
+    // Project cards are animated by their own component scripts
+    // ============================================
+    // FOOTER ANIMATIONS
+    // ============================================
+    const footerLogo = document.getElementById('footer-logo');
+    if (footerLogo) {
+      gsap.from(footerLogo, {
+        y: '35%',
+        opacity: 0,
+        duration: 1.2,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: footerLogo,
+          start: 'top 90%',
+          toggleActions: 'play none none none'
+        }
+      });
+    }
+
+    const footerLetters = document.querySelectorAll('.footer-letter');
+    if (footerLetters.length > 0) {
+      gsap.from(footerLetters, {
+        y: 100,
+        opacity: 0,
+        duration: 0.6,
+        stagger: 0.08,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '#footer-logo-container',
+          start: 'top 85%',
+          toggleActions: 'play none none none'
+        }
+      });
+    }
+
+    // Refresh ScrollTrigger after setup
+    ScrollTrigger.refresh();
+  }
+
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAnimations);
+  } else {
+    initAnimations();
+  }
+</script>

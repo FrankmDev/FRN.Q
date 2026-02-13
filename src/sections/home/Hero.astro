@@ -1,0 +1,533 @@
+---
+import { siteConfig } from "../../data/site";
+
+interface Props {
+  heroVisual: string;
+}
+
+const { heroVisual } = Astro.props;
+const displayName = siteConfig.name;
+const letters = displayName.split("");
+---
+
+<section
+  id="hero"
+  class="min-h-screen relative flex flex-col justify-center items-center overflow-hidden"
+>
+  {/* Enhanced Parallax Background with Depth Layers */}
+  <div id="hero-bg" class="absolute inset-0 z-0">
+    {/* Base Image */}
+    <img
+      src={heroVisual}
+      alt=""
+      class="w-full h-full object-cover opacity-[0.08]"
+      loading="eager"
+      decoding="async"
+    />
+    
+    {/* Gradient Overlay - Multi-layered for depth */}
+    <div
+      class="absolute inset-0 bg-gradient-to-b from-background/70 via-background/85 to-background"
+    >
+    </div>
+    
+    {/* Subtle Grid Pattern - Architectural reference */}
+    <div 
+      class="absolute inset-0 opacity-[0.03]"
+      style="background-image: linear-gradient(to right, hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(to bottom, hsl(var(--foreground)) 1px, transparent 1px); background-size: 80px 80px;"
+    >
+    </div>
+    
+    {/* Vignette Effect */}
+    <div 
+      class="absolute inset-0"
+      style="background: radial-gradient(ellipse at center, transparent 0%, transparent 50%, hsl(var(--background)) 100%);"
+    >
+    </div>
+  </div>
+
+  {/* Content */}
+  <div
+    id="hero-content"
+    class="relative z-10 text-center px-6 w-full max-w-[100vw]"
+  >
+    <div class="overflow-hidden mb-6">
+      <span
+        id="hero-label"
+        class="hero-label font-mono text-[10px] tracking-[0.6em] text-accent/80 inline-block border border-accent/40 px-4 py-1.5 relative"
+        >
+        <span class="relative z-10">CREATIVE DEVELOPER</span>
+        <span class="absolute inset-0 bg-accent/5 scale-x-0 origin-left transition-transform duration-500 group-hover:scale-x-100"></span>
+      </span
+      >
+    </div>
+
+    {/* Title - Individual Letters - VISIBLE BY DEFAULT */}
+    <div class="relative">
+      <h1
+        id="hero-title"
+        class="text-foreground relative inline-block px-4"
+        style={{
+          fontSize: "clamp(10rem, 40vw, 35rem)",
+          lineHeight: 0.8,
+          fontWeight: 900,
+          letterSpacing: "-0.1em",
+        }}
+      >
+        {
+          letters.map((letter, i) => (
+            <span
+              class={`hero-letter inline-block ${letter === "." ? "text-accent" : ""}`}
+              data-letter
+              data-index={i}
+            >
+              {letter === " " ? "\u00A0" : letter}
+            </span>
+          ))
+        }
+      </h1>
+    </div>
+
+    {/* Decorative line with glow effect */}
+    <div class="mt-10 flex justify-center">
+      <div class="relative">
+        <div
+          id="hero-line"
+          class="h-[1px] bg-foreground/40 origin-center relative"
+          style="width: 140px;"
+        >
+        </div>
+        {/* Glow effect */}
+        <div 
+          id="hero-line-glow"
+          class="absolute inset-0 h-[1px] bg-accent/60 blur-sm origin-center"
+          style="width: 140px; transform: scaleX(0);"
+        >
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* Enhanced Scroll Indicator */}
+  <div
+    id="hero-scroll"
+    class="absolute bottom-20 left-0 right-0 z-20 flex flex-col items-center"
+  >
+    <a
+      href="#works"
+      class="scroll-container group flex flex-col items-center gap-4 cursor-pointer"
+    >
+      {/* Scroll text with enhanced animation */}
+      <div
+        class="scroll-text font-mono text-[10px] tracking-[0.6em] text-muted-foreground overflow-hidden"
+      >
+        {
+          "SCROLL".split("").map((char, i) => (
+            <span
+              class="inline-block scroll-letter"
+              style={`animation-delay: ${i * 0.08}s`}
+            >
+              {char}
+            </span>
+          ))
+        }
+      </div>
+      
+      {/* Enhanced scroll line with dual dots */}
+      <div class="relative w-[1px] h-24 bg-foreground/10 overflow-hidden">
+        <div class="scroll-dot-primary absolute w-full h-4 bg-accent"></div>
+        <div class="scroll-dot-secondary absolute w-full h-2 bg-accent/50"></div>
+      </div>
+      
+      {/* Arrow with hover animation */}
+      <div class="scroll-arrow relative">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          class="text-muted-foreground group-hover:text-accent transition-all duration-300 group-hover:translate-y-1"
+        >
+          <path
+            d="M12 5v14M19 12l-7 7-7-7"
+            stroke-linecap="square"
+            stroke-linejoin="miter"></path>
+        </svg>
+        {/* Arrow glow on hover */}
+        <div class="absolute inset-0 bg-accent/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      </div>
+    </a>
+  </div>
+
+  {/* Enhanced Bottom Metadata */}
+  <div
+    id="hero-meta"
+    class="absolute bottom-0 left-0 right-0 z-10 flex items-center justify-between px-6 lg:px-12 py-4 border-t border-foreground/10 bg-background/80 backdrop-blur-sm"
+  >
+    {/* Left side with indicator dot */}
+    <div class="flex items-center gap-3">
+      <span class="w-1.5 h-1.5 bg-accent rounded-full animate-pulse"></span>
+      <span
+        class="font-mono text-[0.65rem] tracking-[0.3em] text-muted-foreground uppercase"
+      >
+        Scroll to explore
+      </span>
+    </div>
+    
+    {/* Right side with decorative separator */}
+    <div class="flex items-center gap-4">
+      <span
+        class="font-mono text-[0.65rem] tracking-[0.2em] text-muted-foreground"
+      >
+        {siteConfig.location}
+      </span>
+      <span class="w-8 h-[1px] bg-foreground/20"></span>
+      <span
+        class="font-mono text-[0.65rem] tracking-[0.2em] text-muted-foreground"
+      >
+        {siteConfig.year}
+      </span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-letter {
+    display: inline-block;
+    will-change: transform, opacity;
+    transform-origin: center center;
+    white-space: pre;
+    margin-right: -0.08em;
+    /* Initial state will be set by GSAP */
+  }
+
+  #hero-label {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .hero-label {
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .hero-label:hover {
+    border-color: hsl(var(--accent) / 0.6);
+    color: hsl(var(--accent));
+  }
+
+  #hero-line {
+    opacity: 1;
+    transform: scaleX(0);
+    transform-origin: center;
+  }
+
+  #hero-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  #hero-meta {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  @keyframes scrollReveal {
+    0%,
+    100% {
+      opacity: 0.4;
+      transform: translateY(0);
+    }
+    50% {
+      opacity: 1;
+      transform: translateY(-3px);
+    }
+  }
+
+  .scroll-letter {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: scrollReveal 2s ease-in-out infinite;
+  }
+
+  .scroll-letter:nth-child(1) {
+    animation-delay: 0s;
+  }
+  .scroll-letter:nth-child(2) {
+    animation-delay: 0.1s;
+  }
+  .scroll-letter:nth-child(3) {
+    animation-delay: 0.2s;
+  }
+  .scroll-letter:nth-child(4) {
+    animation-delay: 0.3s;
+  }
+  .scroll-letter:nth-child(5) {
+    animation-delay: 0.4s;
+  }
+  .scroll-letter:nth-child(6) {
+    animation-delay: 0.5s;
+  }
+
+  @keyframes bounceDot {
+    0%,
+    100% {
+      top: 0;
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      top: calc(100% - 16px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes bounceDotSecondary {
+    0%,
+    100% {
+      top: 0;
+      opacity: 0;
+    }
+    15% {
+      opacity: 0.5;
+    }
+    85% {
+      opacity: 0.5;
+    }
+    100% {
+      top: calc(100% - 8px);
+      opacity: 0;
+    }
+  }
+
+  .scroll-dot-primary {
+    animation: bounceDot 2.5s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  }
+
+  .scroll-dot-secondary {
+    animation: bounceDotSecondary 2.5s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+    animation-delay: 0.4s;
+  }
+
+  @keyframes arrowEnter {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .scroll-arrow {
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: arrowEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) 2s forwards;
+  }
+
+  .scroll-container:hover .scroll-dot-primary,
+  .scroll-container:hover .scroll-dot-secondary {
+    animation-duration: 1.2s;
+  }
+
+  .scroll-container:hover .scroll-dot-primary {
+    background-color: hsl(var(--accent));
+  }
+
+  .scroll-container:hover .scroll-letter {
+    color: hsl(var(--accent));
+  }
+</style>
+
+<script>
+  // Simple, direct approach - wait for GSAP and animate
+  console.log("[Hero] Script loaded");
+
+  function animateHero() {
+    console.log("[Hero] animateHero called");
+
+    // Check GSAP
+    if (typeof window.gsap === "undefined") {
+      console.log("[Hero] GSAP not ready, waiting...");
+      setTimeout(animateHero, 50);
+      return;
+    }
+
+    const letters = document.querySelectorAll("[data-letter]");
+    console.log("[Hero] Letters found:", letters.length);
+
+    if (letters.length === 0) {
+      console.error("[Hero] No letters found!");
+      return;
+    }
+
+    console.log("[Hero] Starting BRUTAL animation NOW");
+
+    // BRUTALIST MINIMAL - Direct and heavy
+    letters.forEach((letter, i) => {
+      // Set initial state - all from top
+      window.gsap.set(letter, {
+        y: -200,
+        opacity: 0,
+      });
+
+      // Single brutal drop
+      window.gsap.to(letter, {
+        y: 0,
+        opacity: 1,
+        duration: 0.6,
+        delay: 0.05 + i * 0.05,
+        ease: "power4.out",
+      });
+    });
+
+    // Animate other elements with brutal timing
+    const heroLabel = document.getElementById("hero-label");
+    const heroLine = document.getElementById("hero-line");
+    const heroScroll = document.getElementById("hero-scroll");
+    const heroMeta = document.getElementById("hero-meta");
+
+    if (heroLabel)
+      window.gsap.to(heroLabel, {
+        y: 0,
+        opacity: 1,
+        duration: 0.5,
+        delay: 0.6,
+        ease: "power4.out",
+      });
+    if (heroLine) {
+      window.gsap.fromTo(heroLine, 
+        { scaleX: 0, opacity: 0 },
+        { 
+          scaleX: 1, 
+          opacity: 1,
+          duration: 0.6, 
+          delay: 0.8,
+          ease: "power4.out",
+        }
+      );
+      // Animate glow line
+      const heroLineGlow = document.getElementById("hero-line-glow");
+      if (heroLineGlow) {
+        window.gsap.fromTo(heroLineGlow,
+          { scaleX: 0, opacity: 0 },
+          {
+            scaleX: 1,
+            opacity: 1,
+            duration: 0.8,
+            delay: 1,
+            ease: "power3.out",
+          }
+        );
+      }
+    }
+    if (heroScroll)
+      window.gsap.to(heroScroll, {
+        opacity: 1,
+        y: 0,
+        duration: 0.5,
+        delay: 1.0,
+        ease: "power4.out",
+      });
+    if (heroMeta)
+      window.gsap.to(heroMeta, { opacity: 1, y: 0, duration: 0.5, delay: 1.1 });
+
+    console.log("[Hero] BRUTAL animation sequence initiated");
+  }
+
+  // Listen for preloader complete
+  let animationTriggered = false;
+
+  window.addEventListener("preloader-complete", () => {
+    console.log("[Hero] Preloader complete event received");
+    if (!animationTriggered) {
+      animationTriggered = true;
+      animateHero();
+    }
+  });
+
+  // Fallback - start after 2 seconds regardless
+  setTimeout(() => {
+    console.log("[Hero] Fallback timeout triggered");
+    if (!animationTriggered) {
+      animationTriggered = true;
+      animateHero();
+    }
+  }, 2000);
+
+  // Enhanced Parallax scroll effect with depth layers
+  const heroBg = document.getElementById("hero-bg");
+  const heroContent = document.getElementById("hero-content");
+  const heroLabel = document.getElementById("hero-label");
+  const heroScroll = document.getElementById("hero-scroll");
+  const heroMeta = document.getElementById("hero-meta");
+
+  if (heroBg && heroContent) {
+    let ticking = false;
+    let lastScrollY = 0;
+    
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            const scrollY = window.scrollY;
+            const heroHeight = window.innerHeight;
+            const progress = Math.min(scrollY / heroHeight, 1);
+            const scrollDelta = scrollY - lastScrollY;
+            lastScrollY = scrollY;
+
+            // Background parallax - slower movement
+            heroBg.style.transform = `translateY(${progress * 30}%) scale(${1 + progress * 0.2})`;
+
+            // Only apply parallax after animation has triggered
+            if (animationTriggered) {
+              // Content moves faster for depth
+              heroContent.style.transform = `translateY(${progress * 20}%)`;
+              heroContent.style.opacity = String(1 - progress * 1.5);
+              
+              // Label fades out slightly earlier
+              if (heroLabel) {
+                heroLabel.style.opacity = String(1 - progress * 2);
+                heroLabel.style.transform = `translateY(${progress * -10}px)`;
+              }
+              
+              // Scroll indicator fades out
+              if (heroScroll) {
+                heroScroll.style.opacity = String(1 - progress * 3);
+              }
+              
+              // Meta bar stays visible longer
+              if (heroMeta) {
+                heroMeta.style.opacity = String(1 - progress * 1.2);
+              }
+            }
+
+            ticking = false;
+          });
+          ticking = true;
+        }
+      },
+      { passive: true },
+    );
+  }
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", (e) => {
+      const href = anchor.getAttribute("href");
+      if (href && href !== "#") {
+        const target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    });
+  });
+</script>

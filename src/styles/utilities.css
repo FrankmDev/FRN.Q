@@ -1,0 +1,98 @@
+/* Custom Utility Classes */
+
+/* Typography */
+.text-massive {
+    font-size: clamp(4rem, 15vw, 14rem);
+    line-height: 0.85;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+}
+
+.text-huge {
+    font-size: clamp(2.5rem, 8vw, 7rem);
+    line-height: 0.9;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+}
+
+.text-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: hsl(var(--muted-foreground));
+}
+
+/* Borders */
+.border-thin {
+    border: 0.5px solid hsl(0 0% 20%);
+}
+
+.border-thin-t {
+    border-top: 0.5px solid hsl(0 0% 20%);
+}
+
+.border-thin-b {
+    border-bottom: 0.5px solid hsl(0 0% 20%);
+}
+
+.border-thin-l {
+    border-left: 0.5px solid hsl(0 0% 20%);
+}
+
+.border-thin-r {
+    border-right: 0.5px solid hsl(0 0% 20%);
+}
+
+/* Layout */
+.container-full {
+    width: 100%;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+.metadata-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1px;
+    background: hsl(0 0% 15%);
+}
+
+.metadata-grid > * {
+    background: hsl(var(--background));
+    padding: 0.75rem 1rem;
+}
+
+/* Lab Theme */
+.lab-theme {
+    --background: var(--lab-background);
+    --foreground: var(--lab-foreground);
+    --card: 0 100% 45%;
+    --card-foreground: 0 0% 0%;
+    --muted-foreground: 0 0% 15%;
+    --border: 0 0% 0%;
+    --accent: 0 0% 0%;
+    --accent-foreground: 0 58% 47%;
+}
+
+/* Hide cursor on desktop */
+@media (min-width: 768px) {
+    .cursor-none * {
+        cursor: none !important;
+    }
+}
+
+/* Screen reader only */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}

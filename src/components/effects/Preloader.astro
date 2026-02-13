@@ -1,0 +1,225 @@
+---
+/**
+ * Preloader - Text scramble effect with split reveal (FAST VERSION)
+ * Client-side only component
+ */
+
+interface Props {
+    targetText?: string;
+}
+
+const { targetText = "FRN.Q STUDIO" } = Astro.props;
+const letters = targetText.split("");
+---
+
+<script>
+    (function() {
+        document.body.style.cursor = "none";
+        document.documentElement.style.cursor = "none";
+        
+        // Hide custom cursor during preloader
+        const customCursor = document.getElementById("custom-cursor");
+        if (customCursor) {
+            customCursor.classList.add("is-hidden");
+        }
+    })();
+</script>
+
+<div
+    id="preloader"
+    class="fixed inset-0 z-[999] flex items-center justify-center pointer-events-auto"
+    data-target={targetText}
+    aria-hidden="true"
+>
+    {/* Top half */}
+    <div
+        id="preloader-top"
+        class="absolute inset-0 bottom-1/2 bg-background transition-transform duration-500"
+        style="transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1)"
+    >
+    </div>
+    {/* Bottom half */}
+    <div
+        id="preloader-bottom"
+        class="absolute inset-0 top-1/2 bg-background transition-transform duration-500"
+        style="transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1)"
+    >
+    </div>
+
+    {/* Scramble Text Container */}
+    <div
+        id="preloader-text"
+        class="relative z-10 flex items-center justify-center"
+    >
+        {
+            letters.map((char, i) => (
+                <span
+                    class={`preloader-letter ${char === "." ? "" : "text-muted-foreground"}`}
+                    data-index={i}
+                    data-char={char}
+                    style={
+                        char === "."
+                            ? "font-family: var(--font-display); font-weight: 900; font-size: clamp(3rem, 12vw, 10rem); letter-spacing: -0.04em; font-variant-numeric: tabular-nums; display: inline-block; line-height: 1.1; color: #BF3235;"
+                            : "font-family: var(--font-display); font-weight: 900; font-size: clamp(3rem, 12vw, 10rem); letter-spacing: -0.04em; font-variant-numeric: tabular-nums; display: inline-block; line-height: 1.1;"
+                    }
+                >
+                    {" "}
+                </span>
+            ))
+        }
+    </div>
+
+    {/* Progress line */}
+    <div
+        class="absolute bottom-16 left-1/2 -translate-x-1/2 w-48 h-[1px] bg-muted overflow-hidden"
+    >
+        <div
+            id="progress-bar"
+            class="h-full bg-foreground origin-left"
+            style="transform: scaleX(0); transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1)"
+        >
+        </div>
+    </div>
+</div>
+
+<style>
+    #preloader-top.revealing {
+        transform: translateY(-100%);
+    }
+
+    #preloader-bottom.revealing {
+        transform: translateY(100%);
+    }
+
+    #preloader.hidden {
+        display: none;
+    }
+
+    .preloader-letter {
+        transition:
+            color 0.1s ease,
+            opacity 0.25s ease,
+            transform 0.25s ease;
+    }
+
+    .preloader-letter.locked {
+        color: hsl(var(--foreground));
+    }
+
+    .preloader-letter.exiting {
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+
+    /* Hide cursor during preloader */
+    #preloader {
+        cursor: none;
+    }
+</style>
+
+<script>
+    document.body.style.cursor = "none";
+    
+    const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*<>{}[]";
+
+    const preloader = document.getElementById("preloader");
+    const preloaderTop = document.getElementById("preloader-top");
+    const preloaderBottom = document.getElementById("preloader-bottom");
+    const progressBar = document.getElementById("progress-bar");
+    const mainContent = document.getElementById("main-content");
+
+    if (preloader && progressBar) {
+        const targetText = preloader.dataset.target || "FRN.Q STUDIO";
+        const letterElements = preloader.querySelectorAll(".preloader-letter");
+        const locked = Array(targetText.length).fill(false);
+
+        // Start progress bar
+        requestAnimationFrame(() => {
+            progressBar.style.transform = "scaleX(1)";
+        });
+
+        // Scramble effect
+        const scrambleIntervals: number[] = [];
+
+        targetText.split("").forEach((char, i) => {
+            const el = letterElements[i];
+
+            const interval = window.setInterval(() => {
+                if (!locked[i] && el) {
+                    el.textContent =
+                        CHARS[Math.floor(Math.random() * CHARS.length)];
+                }
+            }, 25);
+            scrambleIntervals.push(interval);
+
+            // Lock character
+            setTimeout(
+                () => {
+                    clearInterval(scrambleIntervals[i]);
+                    locked[i] = true;
+
+                    if (el) {
+                        el.textContent = char === " " ? "\u00A0" : char;
+                        el.classList.remove("text-muted-foreground");
+                        el.classList.add("locked");
+
+                        // Flash animation
+                        el.animate(
+                            [
+                                { opacity: 0.3, transform: "scale(1.2)" },
+                                { opacity: 1, transform: "scale(1)" },
+                            ],
+                            {
+                                duration: 150,
+                                easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+                            },
+                        );
+                    }
+                },
+                300 + i * 80,
+            );
+        });
+
+        // Reveal after all locked
+        const totalLockTime = 300 + targetText.length * 80 + 200;
+
+        console.log("[Preloader] Total lock time:", totalLockTime, "ms");
+
+        setTimeout(() => {
+            console.log("[Preloader] Starting exit animation");
+
+            letterElements.forEach((letter, i) => {
+                setTimeout(() => {
+                    letter.classList.add("exiting");
+                }, i * 12);
+            });
+
+            setTimeout(() => {
+                console.log("[Preloader] Revealing curtains");
+                preloaderTop?.classList.add("revealing");
+                preloaderBottom?.classList.add("revealing");
+
+                if (mainContent) {
+                    mainContent.style.opacity = "1";
+                    console.log("[Preloader] Main content visible");
+                }
+
+                console.log("[Preloader] Dispatching preloader-complete event");
+                window.dispatchEvent(new CustomEvent("preloader-complete"));
+
+                setTimeout(() => {
+                    console.log("[Preloader] Hiding preloader");
+                    preloader?.classList.add("hidden");
+                    document.body.style.cursor = "auto";
+                    document.documentElement.style.cursor = "auto";
+                    
+                    // Show custom cursor again
+                    const customCursor = document.getElementById("custom-cursor");
+                    if (customCursor) {
+                        customCursor.classList.remove("is-hidden");
+                    }
+                }, 500);
+            }, 200);
+        }, totalLockTime);
+    }
+</script>

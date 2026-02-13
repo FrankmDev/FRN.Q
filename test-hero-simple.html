@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hero Animation Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: #050505;
+        color: #fff;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .hero-letter {
+        display: inline-block;
+        font-size: 10rem;
+        font-weight: 900;
+        opacity: 0;
+        transform: translateY(-150px);
+      }
+
+      .accent {
+        color: #ff0000;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="hero-title">
+      <span class="hero-letter" data-letter>F</span>
+      <span class="hero-letter" data-letter>R</span>
+      <span class="hero-letter" data-letter>N</span>
+      <span class="hero-letter accent" data-letter>.</span>
+      <span class="hero-letter" data-letter>Q</span>
+    </div>
+
+    <script>
+      console.log("Script loaded");
+      console.log("GSAP available:", typeof gsap !== "undefined");
+
+      const letters = document.querySelectorAll("[data-letter]");
+      console.log("Letters found:", letters.length);
+
+      if (typeof gsap !== "undefined" && letters.length > 0) {
+        console.log("Starting animation...");
+
+        gsap.to(letters, {
+          y: 0,
+          opacity: 1,
+          duration: 1.2,
+          stagger: 0.05,
+          ease: "bounce.out",
+          delay: 0.5,
+          onStart: () => {
+            console.log("Animation started!");
+          },
+          onComplete: () => {
+            console.log("Animation complete!");
+          },
+        });
+      } else {
+        console.error("GSAP or letters not found");
+      }
+    </script>
+  </body>
+</html>
