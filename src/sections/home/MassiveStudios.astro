@@ -69,14 +69,14 @@ const line2 = "STUDIOS";
     <div class="text-center mb-20 md:mb-28 relative">
       <h2
         class="massive-title text-black uppercase leading-[0.75] relative"
-        data-parallax="title"
+
         style="font-size: clamp(8rem, 28vw, 24rem); font-family: 'Bokis', serif; font-weight: 400; letter-spacing: -0.02em;"
       >
         {line1}
       </h2>
       <h3
         class="massive-subtitle text-black uppercase leading-[0.75] -mt-4 md:-mt-8 relative"
-        data-parallax="subtitle"
+
         style="font-size: clamp(1.5rem, 5vw, 4rem); font-family: 'Bokis', serif; font-weight: 400; letter-spacing: -0.02em;"
       >
         {line2}
@@ -196,36 +196,6 @@ const line2 = "STUDIOS";
       },
       "-=0.4",
     );
-    
-    // Parallax effect on scroll
-    const title = section.querySelector('[data-parallax="title"]');
-    const subtitle = section.querySelector('[data-parallax="subtitle"]');
-    
-    if (title) {
-      gsap.to(title, {
-        y: -50,
-        ease: "none",
-        scrollTrigger: {
-          trigger: section,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1,
-        },
-      });
-    }
-    
-    if (subtitle) {
-      gsap.to(subtitle, {
-        y: -30,
-        ease: "none",
-        scrollTrigger: {
-          trigger: section,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1,
-        },
-      });
-    }
     
     // Animate grain layers for film effect
     const grain1 = document.getElementById("grain-1");

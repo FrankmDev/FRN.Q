@@ -6,170 +6,108 @@ const technologies = ["ASTRO", "NEXT.JS", "GSAP", "FRAMER", "ELEMENTOR"];
 <section id="about" class="relative bg-background">
   
   {/* HEADER */}
-  <header class="relative border-b border-foreground/10">
+  <header class="relative">
     {/* Top accent line */}
-    <div class="h-1 bg-accent"></div>
+    <div class="h-1.5 bg-accent"></div>
     
     {/* Section bar */}
-    <div class="px-6 lg:px-16 py-4 flex justify-between items-center border-b border-foreground/10">
-      <div class="flex items-center gap-3">
-        <div class="w-2 h-2 bg-accent"></div>
-        <span class="font-mono text-[10px] tracking-[0.5em] text-muted-foreground uppercase">Section</span>
-      </div>
-      <span class="about-section-num font-black text-4xl lg:text-5xl text-foreground/20">
-        01
-      </span>
+    <div class="border-b border-foreground px-6 lg:px-16 py-4 flex justify-between items-center">
+      <span class="font-mono text-[10px] tracking-[0.5em] text-muted-foreground uppercase">Section</span>
+      <span class="font-black text-5xl text-foreground/10">01</span>
     </div>
 
-    {/* Main header content */}
-    <div class="px-6 lg:px-16 pt-16 lg:pt-24 pb-12 lg:pb-16">
-      {/* Label */}
-      <div class="about-label-wrapper inline-flex items-center gap-3 mb-8 px-4 py-2 border border-foreground/20">
-        <div class="w-1.5 h-1.5 bg-accent"></div>
-        <span class="about-label font-mono text-[10px] tracking-[0.4em] text-foreground uppercase">
-          Who I Am
-        </span>
-      </div>
-
-      {/* Title and Meta */}
-      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 lg:gap-16">
-        {/* Title */}
-        <div>
-          <h2 class="about-title font-black text-foreground leading-[0.8] tracking-tighter" style="font-size: clamp(6rem, 20vw, 18rem);">
-            {
-              titleLetters.map((letter, i) => (
-                <span class="about-letter inline-block" data-index={i}>
-                  {letter}
-                </span>
-              ))
-            }
-          </h2>
-          {/* Description */}
-          <div class="mt-6 lg:mt-8 max-w-2xl">
-            <p class="about-desc text-lg lg:text-xl text-foreground font-black uppercase leading-[1.1] tracking-tight">
-              Creative developer building <span class="text-accent">digital experiences</span> that merge technical excellence with visual impact.
-            </p>
-          </div>
+    {/* Main header */}
+    <div class="border-b border-foreground">
+      <div class="px-6 lg:px-16 py-20 lg:py-28">
+        
+        {/* Top label */}
+        <div class="about-label-wrapper flex items-center gap-3 mb-12">
+          <span class="w-1.5 h-1.5 bg-accent"></span>
+          <span class="about-label font-mono text-[10px] tracking-[0.4em] text-foreground uppercase">Who I Am</span>
         </div>
 
-        {/* Meta */}
-        <div class="about-meta flex items-center gap-8 lg:gap-12 pb-2">
-          {/* Years */}
-          <div class="about-meta-item">
-            <span class="font-mono text-[10px] tracking-[0.4em] text-muted-foreground uppercase block mb-2">
-              Experience
+        {/* Title - Full width massive */}
+        <h2 class="about-title font-black text-foreground leading-[0.75] tracking-[-0.04em] mb-16" style="font-size: clamp(5rem, 22vw, 18rem);">
+          {titleLetters.map((letter, i) => (
+            <span class="about-letter inline-block hover:text-accent transition-colors duration-300" data-index={i}>
+              {letter}
             </span>
-            <span class="font-black text-5xl lg:text-6xl text-foreground leading-none">
-              03
-            </span>
-          </div>
+          ))}
+        </h2>
+
+        {/* Bottom row: Description + Stats */}
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-12">
+          <p class="about-desc text-xl lg:text-2xl text-foreground/70 max-w-xl leading-relaxed">
+            Creative developer building <span class="text-accent font-medium">digital experiences</span> that merge technical excellence with visual impact.
+          </p>
           
-          {/* CTA */}
-          <a 
-            href="#contact" 
-            class="about-cta-link group inline-flex items-center gap-3 font-mono text-xs tracking-[0.2em] uppercase border-2 border-foreground px-5 py-3 hover:bg-foreground hover:text-background transition-all duration-300"
-          >
-            <span>Contact</span>
-            <span class="link-arrow transform group-hover:translate-x-1 transition-transform">→</span>
-          </a>
+          <div class="about-meta flex items-center gap-8">
+            <div class="text-right">
+              <span class="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase block mb-1">Experience</span>
+              <span class="font-black text-5xl text-foreground">03</span>
+            </div>
+            <a href="#contact" class="about-cta-link group flex items-center justify-center w-14 h-14 border border-foreground hover:bg-foreground hover:text-background transition-all duration-300">
+              <svg class="w-5 h-5 transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+              </svg>
+            </a>
+          </div>
         </div>
       </div>
     </div>
   </header>
 
-  {/* STATS - BRUTALIST GRID */}
-  <div class="border-b border-foreground/10">
+  {/* STATS */}
+  <div class="border-b border-foreground">
     <div class="grid grid-cols-2 lg:grid-cols-4">
       {[
-        { label: "Experience", value: "03", sub: "Years", accent: true },
-        { label: "Code Projects", value: "08", sub: "Completed", accent: false },
-        { label: "Elementor", value: "200+", sub: "Projects", accent: true },
-        { label: "Stack", value: "05", sub: "Technologies", accent: false }
+        { label: "Years", value: "03" },
+        { label: "Projects", value: "08" },
+        { label: "Clients", value: "200+" },
+        { label: "Technologies", value: "05" }
       ].map((stat, i) => (
-        <div class={`about-stat group relative overflow-hidden ${i < 3 ? 'border-r border-foreground/10' : ''} ${i < 2 ? 'border-b lg:border-b-0 border-foreground/10' : ''}`}>
-          {/* Hover fill effect */}
-          <div class="absolute inset-0 bg-accent origin-bottom scale-y-0 group-hover:scale-y-100 transition-transform duration-500 ease-out"></div>
-          
-          <div class="relative z-10 px-6 lg:px-8 py-10 lg:py-14">
-            {/* Top accent bar */}
-            <div class={`h-1 w-12 mb-6 ${stat.accent ? 'bg-accent' : 'bg-foreground/30'} group-hover:bg-foreground transition-colors duration-300`}></div>
-            
-            {/* Label */}
-            <span class="font-mono text-[10px] tracking-[0.5em] text-muted-foreground uppercase block mb-4 group-hover:text-foreground/70 transition-colors duration-300">
-              {stat.label}
-            </span>
-            
-            {/* Value - MASSIVE */}
-            <span class="about-stat-number font-black text-5xl sm:text-6xl lg:text-7xl xl:text-8xl text-foreground group-hover:text-background leading-none tracking-tighter block transition-colors duration-300">
-              {stat.value}
-            </span>
-            
-            {/* Sub label */}
-            <span class="font-mono text-xs text-muted-foreground uppercase tracking-wider block mt-3 group-hover:text-foreground/70 transition-colors duration-300">
-              {stat.sub}
-            </span>
-            
-            {/* Decorative corner */}
-            <div class="absolute top-4 right-4 w-2 h-2 border-t border-r border-foreground/20 group-hover:border-background/40 transition-colors duration-300"></div>
-          </div>
+        <div class={`about-stat group p-8 lg:p-12 ${i < 3 ? 'border-r border-foreground' : ''} ${i < 2 ? 'border-b lg:border-b-0 border-foreground' : ''}`}>
+          <span class="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase block mb-4">{stat.label}</span>
+          <span class="about-stat-number font-black text-6xl lg:text-7xl text-foreground group-hover:text-accent transition-colors duration-300">{stat.value}</span>
         </div>
       ))}
     </div>
   </div>
 
   {/* CONTENT */}
-  <div class="px-6 lg:px-16 py-16 lg:py-20">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-      {/* LEFT */}
+  <div class="px-6 lg:px-16 py-20 lg:py-28">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32">
+      {/* Left */}
       <div class="about-section">
-        <div class="flex gap-6">
-          <div class="w-1 bg-accent shrink-0"></div>
-          <div>
-            <span class="font-mono text-[10px] tracking-[0.4em] text-muted-foreground uppercase block mb-4">
-              Background
+        <span class="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase block mb-6">Background</span>
+        <h3 class="font-display font-black text-3xl lg:text-4xl text-foreground uppercase leading-tight mb-6">
+          Frontend Specialist
+        </h3>
+        <p class="text-lg text-foreground/70 leading-relaxed mb-8">
+          Specializing in creative frontend development, interactive experiences, and modern web applications.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          {["React", "Astro", "TypeScript", "GSAP"].map(tech => (
+            <span class="font-mono text-xs tracking-wider uppercase border border-foreground/30 px-4 py-2 hover:border-foreground hover:bg-foreground hover:text-background transition-all duration-300 cursor-default">
+              {tech}
             </span>
-            <h3 class="font-display font-black text-2xl lg:text-4xl text-foreground uppercase leading-tight mb-5">
-              Frontend Specialist
-            </h3>
-            <p class="text-base lg:text-lg text-foreground/80 leading-relaxed mb-6">
-              Specializing in creative frontend development, interactive experiences, and modern web applications that captivate and convert.
-            </p>
-            <div class="flex flex-wrap gap-2">
-              {["React", "Astro", "TypeScript", "GSAP"].map(tech => (
-                <span class="font-mono text-xs tracking-wider uppercase border border-foreground/30 px-3 py-1.5 hover:bg-foreground hover:text-background transition-all duration-300 cursor-default">
-                  {tech}
-                </span>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
       </div>
 
-      {/* RIGHT */}
+      {/* Right */}
       <div class="about-section">
-        <div class="flex gap-6">
-          <div class="w-1 bg-foreground shrink-0"></div>
-          <div class="flex-1">
-            <span class="font-mono text-[10px] tracking-[0.4em] text-muted-foreground uppercase block mb-6">
-              Tech Stack
-            </span>
-            
-            <div class="space-y-0">
-              {technologies.map((tech, i) => (
-                <div class="tech-item group py-4 border-b border-foreground/10 flex items-center justify-between hover:pl-2 transition-all duration-300 cursor-default">
-                  <div class="flex items-center gap-4">
-                    <span class="font-mono text-xs text-muted-foreground">
-                      0{i + 1}
-                    </span>
-                    <span class="font-display font-black text-xl lg:text-2xl uppercase">
-                      {tech}
-                    </span>
-                  </div>
-                  <div class="w-2 h-2 bg-foreground/20 group-hover:bg-accent transition-colors"></div>
-                </div>
-              ))}
+        <span class="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase block mb-6">Tech Stack</span>
+        <div class="space-y-0">
+          {technologies.map((tech, i) => (
+            <div class="tech-item group py-5 border-b border-foreground/20 flex items-center justify-between hover:pl-2 transition-all duration-300 cursor-default">
+              <div class="flex items-center gap-4">
+                <span class="font-mono text-sm text-muted-foreground w-6">0{i + 1}</span>
+                <span class="font-display font-bold text-lg uppercase">{tech}</span>
+              </div>
+              <span class="w-1.5 h-1.5 bg-foreground/20 group-hover:bg-accent transition-colors rounded-full"></span>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>
@@ -178,20 +116,7 @@ const technologies = ["ASTRO", "NEXT.JS", "GSAP", "FRAMER", "ELEMENTOR"];
 </section>
 
 <style>
-  .about-stat {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-
-  .about-section {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-
-  .tech-item {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
+  /* Animaciones manejadas por GSAP */
 </style>
 
 <script>
@@ -203,61 +128,20 @@ const technologies = ["ASTRO", "NEXT.JS", "GSAP", "FRAMER", "ELEMENTOR"];
 
     const gsap = window.gsap;
 
-    // Stats
     gsap.to(".about-stat", {
-      y: 0,
-      opacity: 1,
-      duration: 0.6,
-      stagger: 0.08,
-      ease: "power3.out",
-      scrollTrigger: {
-        trigger: ".about-stat",
-        start: "top 85%",
-        toggleActions: "play none none reverse",
-      },
+      y: 0, opacity: 1, duration: 0.6, stagger: 0.08, ease: "power3.out",
+      scrollTrigger: { trigger: ".about-stat", start: "top 85%", toggleActions: "play none none reverse" }
     });
 
-    // Sections
     gsap.to(".about-section", {
-      y: 0,
-      opacity: 1,
-      duration: 0.9,
-      stagger: 0.15,
-      ease: "power3.out",
-      scrollTrigger: {
-        trigger: ".about-section",
-        start: "top 80%",
-        toggleActions: "play none none reverse",
-      },
+      y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: "power3.out",
+      scrollTrigger: { trigger: ".about-section", start: "top 80%", toggleActions: "play none none reverse" }
     });
 
-    // Tech items
     gsap.to(".tech-item", {
-      x: 0,
-      opacity: 1,
-      duration: 0.5,
-      stagger: 0.06,
-      ease: "power2.out",
-      scrollTrigger: {
-        trigger: ".tech-item",
-        start: "top 85%",
-        toggleActions: "play none none reverse",
-      },
+      y: 0, opacity: 1, duration: 0.5, stagger: 0.06, ease: "power2.out",
+      scrollTrigger: { trigger: ".tech-item", start: "top 85%", toggleActions: "play none none reverse" }
     });
-
-    // CTA hover effect
-    const aboutCta = document.querySelector('.about-cta-link');
-    if (aboutCta) {
-      const arrow = aboutCta.querySelector('.link-arrow');
-      
-      aboutCta.addEventListener('mouseenter', () => {
-        if (arrow) gsap.to(arrow, { x: 6, duration: 0.3, ease: "power2.out" });
-      });
-      
-      aboutCta.addEventListener('mouseleave', () => {
-        if (arrow) gsap.to(arrow, { x: 0, duration: 0.3, ease: "power2.out" });
-      });
-    }
   }
 
   if (document.readyState === "loading") {

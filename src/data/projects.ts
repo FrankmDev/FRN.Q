@@ -25,6 +25,12 @@ export const projects: Project[] = [
     tech: ["REACT", "WEBGL", "GSAP"],
   },
   {
+    title: "Asercord Energía",
+    category: "CORPORATE",
+    year: "2024",
+    tech: ["REACT", "TAILWIND", "NODE.JS"],
+  },
+  {
     title: "Wanda Animalart",
     category: "PLATFORM",
     year: "2024",

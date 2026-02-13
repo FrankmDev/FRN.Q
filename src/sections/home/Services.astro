@@ -4,196 +4,115 @@ import { siteConfig } from "../../data/site";
 ---
 
 <section id="services" class="relative bg-background">
-  <header
-    class="section-header relative border-b border-foreground/10 overflow-hidden"
-  >
-    {/* Top accent strip */}
-    <div class="h-1 bg-accent section-accent-line"></div>
-
-    {/* Section bar */}
-    <div
-      class="px-6 lg:px-16 py-4 flex justify-between items-center border-b border-foreground/10"
-    >
-      <div class="flex items-center gap-4">
-        <span
-          class="section-cross text-accent font-mono text-xs leading-none select-none"
-          >✦</span
-        >
-        <span
-          class="section-bar-label font-mono text-[10px] tracking-[0.5em] text-muted-foreground uppercase"
-          >Section</span
-        >
-        <span class="w-12 h-px bg-foreground/20 hidden md:block"></span>
-        <span
-          class="section-bar-label font-mono text-[10px] tracking-[0.3em] text-foreground/30 uppercase hidden md:block"
-          >What I Do</span
-        >
-      </div>
-      <div class="flex items-center gap-4">
-        <span
-          class="services-section-num font-black text-4xl lg:text-5xl text-foreground/10 leading-none"
-          >02</span
-        >
-      </div>
+  
+  {/* HEADER */}
+  <header class="relative">
+    <div class="h-1.5 bg-accent"></div>
+    
+    <div class="border-b border-foreground px-6 lg:px-16 py-4 flex justify-between items-center">
+      <span class="font-mono text-[10px] tracking-[0.5em] text-muted-foreground uppercase">Section</span>
+      <span class="font-black text-5xl text-foreground/10">02</span>
     </div>
 
-    {/* Main header content */}
-    <div class="relative px-6 lg:px-16 pt-16 lg:pt-24 pb-12 lg:pb-16">
-      {/* Label — Clean & Minimal */}
-      <div class="services-label-wrapper flex items-center gap-3 mb-4">
-        <span class="w-2 h-2 bg-accent"></span>
-        <span
-          class="services-label font-mono text-xs tracking-[0.4em] text-foreground uppercase"
-        >
-          My Expertise
-        </span>
-      </div>
-
-      {/* Title and Meta */}
-      <div
-        class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 lg:gap-16"
-      >
-        <div>
-          <h2
-            class="services-hero-title font-black text-foreground leading-[0.8] tracking-tighter"
-            style="font-size: clamp(6rem, 20vw, 18rem);"
-          >
-            SERVICES
-          </h2>
-          <div class="services-hero-text mt-6 lg:mt-8 max-w-xl flex gap-4">
-            <div class="w-1 bg-accent shrink-0 hidden md:block"></div>
-            <p
-              class="text-lg lg:text-xl text-foreground font-medium leading-relaxed tracking-tight"
-            >
-              I help brands <span class="text-accent">stand out</span> by crafting
-              digital experiences that are meticulous, performant, and uniquely theirs.
-            </p>
-          </div>
+    <div class="border-b border-foreground">
+      <div class="px-6 lg:px-16 py-20 lg:py-28">
+        
+        <div class="services-label-wrapper flex items-center gap-3 mb-12">
+          <span class="w-1.5 h-1.5 bg-accent"></span>
+          <span class="services-label font-mono text-[10px] tracking-[0.4em] text-foreground uppercase">My Expertise</span>
         </div>
 
-        <div class="services-meta flex items-center gap-8 lg:gap-12 pb-2">
-          <div class="flex flex-col">
-            <span
-              class="font-mono text-[10px] tracking-[0.4em] text-muted-foreground uppercase block mb-2"
-              >Services</span
-            >
-            <span
-              class="font-black text-5xl lg:text-6xl text-foreground leading-none"
-              >04</span
-            >
+        <h2 class="services-hero-title font-black text-foreground leading-[0.75] tracking-[-0.04em] mb-16" style="font-size: clamp(4rem, 20vw, 16rem);">
+          SERVICES
+        </h2>
+
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-12">
+          <p class="services-hero-text text-xl lg:text-2xl text-foreground/70 max-w-xl leading-relaxed">
+            I help brands <span class="text-accent font-medium">stand out</span> by crafting digital experiences that are meticulous and performant.
+          </p>
+          
+          <div class="services-meta flex items-center gap-8">
+            <div class="text-right">
+              <span class="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase block mb-1">Services</span>
+              <span class="font-black text-5xl text-foreground">04</span>
+            </div>
+            <a href="#contact" class="services-cta-link group flex items-center justify-center w-14 h-14 border border-foreground hover:bg-foreground hover:text-background transition-all duration-300">
+              <svg class="w-5 h-5 transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+              </svg>
+            </a>
           </div>
-          <a
-            href="#contact"
-            class="services-cta-link group inline-flex items-center gap-3 font-mono text-xs tracking-[0.2em] uppercase border-2 border-foreground px-5 py-3 hover:bg-foreground hover:text-background transition-all duration-300"
-            data-magnetic
-          >
-            <span>Start Project</span>
-            <span
-              class="link-arrow transform group-hover:translate-x-1 transition-transform"
-              >→</span
-            >
-          </a>
         </div>
       </div>
     </div>
   </header>
 
-  {/* SERVICES LIST - Reverted to List Layout */}
-  <div class="services-list">
-    {
-      services.map((service, index) => (
-        <div
-          class="service-row group relative cursor-pointer border-b border-foreground/10 hover:border-foreground/30 transition-all duration-300 overflow-hidden"
-          data-index={index}
-          data-cursor="VIEW"
-        >
-          <div class="service-bg absolute inset-0 bg-accent/10 -z-10 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-700 ease-out" />
-          <div class="absolute bottom-0 left-0 h-[2px] bg-accent w-0 group-hover:w-full transition-all duration-500 ease-out" />
-          <div class="absolute right-8 top-1/2 -translate-y-1/2 font-black text-[8rem] text-foreground/5 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 translate-x-8 transition-all duration-500">
+  {/* SERVICES LIST */}
+  <div class="services-list border-b border-foreground">
+    {services.map((service, index) => (
+      <div
+        class="service-row group relative cursor-pointer border-b border-foreground last:border-b-0 px-6 lg:px-16 py-8 lg:py-10 hover:bg-foreground/[0.02] transition-colors duration-300"
+        data-index={index}
+      >
+        <div class="flex items-center gap-8 lg:gap-12">
+          <span class="service-number font-mono text-sm text-muted-foreground group-hover:text-accent transition-colors w-8">
             {String(index + 1).padStart(2, "0")}
-          </div>
-          <div class="relative py-6 lg:py-8 px-6 lg:px-16">
-            <div class="flex items-start gap-6 lg:gap-10">
-              <div class="service-number font-mono text-sm text-muted-foreground group-hover:text-accent pt-2 transition-colors w-8 shrink-0">
-                {String(index + 1).padStart(2, "0")}
-              </div>
-              <div class="flex-1">
-                <h3
-                  class="service-title font-display font-black uppercase tracking-tight text-foreground group-hover:text-accent transition-colors duration-300 leading-[0.95]"
-                  style="font-size: clamp(1.75rem, 5vw, 3.5rem);"
-                >
-                  {service.title}
-                </h3>
-                <p class="service-desc font-mono text-sm text-muted-foreground group-hover:text-foreground/80 mt-3 max-w-2xl leading-relaxed">
-                  {service.description}
-                </p>
-              </div>
-              <div class="hidden lg:flex items-center gap-2 pt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  class="text-accent"
-                >
-                  <path
-                    d="M7 17L17 7M17 7H7M17 7V17"
-                    stroke-linecap="square"
-                    stroke-linejoin="miter"
-                  />
-                </svg>
-              </div>
-            </div>
-          </div>
+          </span>
+          
+          <h3 class="service-title flex-1 font-display font-black uppercase text-foreground group-hover:text-accent transition-colors duration-300 leading-[0.95]" style="font-size: clamp(1.25rem, 3.5vw, 2.5rem);">
+            {service.title}
+          </h3>
+          
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-muted-foreground group-hover:text-accent transform group-hover:translate-x-1 transition-all duration-300 opacity-0 group-hover:opacity-100">
+            <path d="M7 17L17 7M17 7H7M17 7V17" stroke-linecap="square" stroke-linejoin="miter"/>
+          </svg>
         </div>
-      ))
-    }
+        
+        <div class="absolute bottom-0 left-0 h-px bg-accent w-0 group-hover:w-full transition-all duration-500 ease-out"></div>
+      </div>
+    ))}
   </div>
 
   {/* CTA */}
-  <div class="px-6 lg:px-16 border-t border-foreground/10">
-    <a href={`mailto:${siteConfig.email}`} class="group block py-12 lg:py-16">
-      <div
-        class="flex flex-col lg:flex-row lg:items-center justify-between gap-6"
-      >
+  <div class="px-6 lg:px-16 border-b border-foreground">
+    <a href={`mailto:${siteConfig.email}`} class="group block py-16 lg:py-20">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
         <div>
-          <span
-            class="font-mono text-[10px] tracking-[0.4em] text-muted-foreground uppercase block mb-3"
-            >Start a project</span
-          >
-          <span
-            class="font-display font-black text-2xl md:text-3xl lg:text-5xl text-foreground group-hover:text-accent transition-colors break-all leading-tight"
-          >
+          <span class="font-mono text-[10px] tracking-[0.4em] text-muted-foreground uppercase block mb-3">Start a project</span>
+          <span class="font-display font-black text-2xl md:text-4xl lg:text-5xl text-foreground group-hover:text-accent transition-colors">
             {siteConfig.email}
           </span>
         </div>
-        <div class="flex items-center gap-4">
-          <span
-            class="font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase hidden lg:block"
-            >Get in touch</span
-          >
-          <div
-            class="w-12 h-12 lg:w-14 lg:h-14 border-2 border-foreground group-hover:border-accent group-hover:bg-accent flex items-center justify-center transition-all duration-300"
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              class="text-foreground group-hover:text-background transition-colors"
-            >
-              <path
-                d="M7 17L17 7M17 7H7M17 7V17"
-                stroke-linecap="square"
-                stroke-linejoin="miter"></path>
-            </svg>
-          </div>
+        <div class="w-14 h-14 border border-foreground group-hover:border-accent group-hover:bg-accent flex items-center justify-center transition-all duration-300">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-foreground group-hover:text-background">
+            <path d="M7 17L17 7M17 7H7M17 7V17" stroke-linecap="square" stroke-linejoin="miter"/>
+          </svg>
         </div>
       </div>
     </a>
   </div>
 </section>
+
+<style>
+  /* Animaciones manejadas por GSAP */
+</style>
+
+<script>
+  function animateServices() {
+    if (typeof window.gsap === "undefined") {
+      setTimeout(animateServices, 50);
+      return;
+    }
+
+    window.gsap.to(".service-row", {
+      x: 0, opacity: 1, duration: 0.5, stagger: 0.08, ease: "power3.out",
+      scrollTrigger: { trigger: ".services-list", start: "top 85%", toggleActions: "play none none reverse" }
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", animateServices);
+  } else {
+    animateServices();
+  }
+</script>

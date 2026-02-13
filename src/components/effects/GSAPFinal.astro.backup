@@ -1,0 +1,1167 @@
+---
+/**
+ * GSAPFinal — UNIFIED ANIMATION SYSTEM v2
+ * Advanced GSAP effects across the entire site:
+ *   - Dramatic entrance animations (clip-path reveals, skew staggers)
+ *   - Advanced card hover effects (tilt, magnetic, parallax layers)
+ *   - Text scramble on hover
+ *   - Magnetic buttons & links
+ *   - Section-level scroll animations
+ */
+---
+
+<!-- Initial hide states — NO !important -->
+<style is:global>
+  /* ═══════════════════════════
+     HERO
+     ═══════════════════════════ */
+  .hero-letter {
+    opacity: 0;
+    transform: translateY(120px);
+  }
+
+  #hero-label,
+  #hero-scroll,
+  #hero-meta {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  #hero-line {
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+
+  /* ═══════════════════════════
+     ABOUT
+     ═══════════════════════════ */
+  .about-letter {
+    opacity: 0;
+    transform: translateY(80px);
+  }
+
+  .about-label-wrapper,
+  .about-desc,
+  .about-cta-link {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .about-meta,
+  .about-section-num {
+    opacity: 0;
+  }
+
+  .about-stat {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  .about-section {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+
+  .tech-item {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  /* ═══════════════════════════
+     SERVICES
+     ═══════════════════════════ */
+  .services-hero-title,
+  .services-hero-text,
+  .services-label-wrapper,
+  .services-meta,
+  .services-cta-link {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+
+  .services-section-num {
+    opacity: 0;
+  }
+
+  .service-row {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  .process-card {
+    opacity: 0;
+    transform: translateY(40px) scale(0.97);
+  }
+
+  /* ═══════════════════════════
+     WORKS / PROJECT CARDS
+     ═══════════════════════════ */
+  [data-project-card] {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+
+  .works-title {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+
+  .works-label-wrapper,
+  .works-meta,
+  .works-footer {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .works-section-num {
+    opacity: 0;
+  }
+
+  /* ═══════════════════════════
+     SECTION HEADERS (shared)
+     ═══════════════════════════ */
+  .section-cross {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0);
+  }
+
+  .section-bar-label {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+
+  .section-ghost-num {
+    opacity: 0;
+    transform: scale(0.8) translateY(40px);
+  }
+
+  .section-label-line {
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+
+  .section-accent-line {
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+
+  /* ═══════════════════════════
+     PERFORMANCE
+     ═══════════════════════════ */
+  .hero-letter,
+  .about-letter,
+  .about-stat,
+  .about-section,
+  .tech-item,
+  .service-row,
+  .process-card,
+  [data-project-card] {
+    will-change: transform, opacity;
+  }
+
+  /* Card tilt 3D context */
+  .project-card {
+    transform-style: preserve-3d;
+    perspective: 800px;
+  }
+
+  /* Text scramble styling */
+  .scramble-char {
+    display: inline-block;
+    transition: none;
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    "use strict";
+
+    var TAG = "[GSAPFinal]";
+    var initialized = false;
+    var SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*!?<>{}[]";
+    
+    // Store active scramble animations to prevent overlapping
+    var activeScrambles = new Map();
+
+    // ═══════════════════════════════════════
+    // WAIT FOR GSAP
+    // ═══════════════════════════════════════
+    function waitForGSAP(cb, maxWait) {
+      maxWait = maxWait || 5000;
+      var start = Date.now();
+      function poll() {
+        if (
+          typeof window.gsap !== "undefined" &&
+          typeof window.ScrollTrigger !== "undefined"
+        ) {
+          window.gsap.registerPlugin(window.ScrollTrigger);
+          console.log(
+            TAG + " GSAP " + window.gsap.version + " + ScrollTrigger ready",
+          );
+          cb(window.gsap, window.ScrollTrigger);
+          return;
+        }
+        if (Date.now() - start < maxWait) {
+          requestAnimationFrame(poll);
+        } else {
+          console.error(TAG + " GSAP timeout — forcing visibility");
+          forceShow();
+        }
+      }
+      poll();
+    }
+
+    function forceShow() {
+      var selectors =
+        ".hero-letter, #hero-label, #hero-scroll, #hero-meta, #hero-line, .about-letter, .about-label-wrapper, .about-desc, .about-meta, .about-stat, .about-section, .tech-item, .service-row, .process-card, [data-project-card], .about-section-num, .services-section-num, .services-hero-title, .services-hero-text, .services-label-wrapper, .services-meta, .about-cta-link, .services-cta-link, .works-title, .works-label-wrapper, .works-meta, .works-footer, .works-section-num";
+      var els = document.querySelectorAll(selectors);
+      for (var i = 0; i < els.length; i++) {
+        els[i].style.opacity = "1";
+        els[i].style.transform = "none";
+      }
+    }
+
+    // ═══════════════════════════════════════
+    // UTILITY: Text Scramble Effect
+    // ═══════════════════════════════════════
+    function textScramble(element, finalText, opts) {
+      opts = opts || {};
+      var duration = opts.duration || 600;
+      var fps = 30;
+      var frameInterval = 1000 / fps;
+      var frames = Math.ceil(duration / frameInterval);
+      var frame = 0;
+      var originalText = finalText || element.textContent || "";
+
+      var interval = setInterval(function () {
+        frame++;
+        var progress = frame / frames;
+        var result = "";
+
+        for (var i = 0; i < originalText.length; i++) {
+          if (originalText[i] === " ") {
+            result += " ";
+          } else if (progress > (i / originalText.length) * 0.7 + 0.3) {
+            result += originalText[i];
+          } else {
+            result +=
+              SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
+          }
+        }
+
+        element.textContent = result;
+
+        if (frame >= frames) {
+          clearInterval(interval);
+          element.textContent = originalText;
+        }
+      }, frameInterval);
+
+      return interval;
+    }
+
+    // ═══════════════════════════════════════
+    // UTILITY: Magnetic Effect
+    // ═══════════════════════════════════════
+    function initMagnetic(gsap, element, strength) {
+      strength = strength || 0.3;
+
+      element.addEventListener("mousemove", function (e) {
+        var rect = element.getBoundingClientRect();
+        var x = e.clientX - rect.left - rect.width / 2;
+        var y = e.clientY - rect.top - rect.height / 2;
+
+        gsap.to(element, {
+          x: x * strength,
+          y: y * strength,
+          duration: 0.4,
+          ease: "power2.out",
+        });
+      });
+
+      element.addEventListener("mouseleave", function () {
+        gsap.to(element, {
+          x: 0,
+          y: 0,
+          duration: 0.6,
+          ease: "elastic.out(1, 0.4)",
+        });
+      });
+    }
+
+    // ═══════════════════════════════════════
+    // ═══════════════════════════════════════
+    // SECTION HEADERS (Ghost num, cross, etc)
+    // ═══════════════════════════════════════
+    function initSectionHeaders(gsap, ST) {
+      var headers = document.querySelectorAll(".section-header");
+
+      headers.forEach(function (header) {
+        var cross = header.querySelector(".section-cross");
+        var labels = header.querySelectorAll(".section-bar-label");
+        var accentLine = header.querySelector(".section-accent-line");
+
+        var tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: header,
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          },
+        });
+
+        // Accents draw first
+        if (accentLine)
+          tl.to(
+            accentLine,
+            { scaleX: 1, duration: 0.8, ease: "power3.out" },
+            0,
+          );
+
+        // Cross spins in
+        if (cross) {
+          tl.to(
+            cross,
+            {
+              rotation: 0,
+              scale: 1,
+              opacity: 1,
+              duration: 0.6,
+              ease: "back.out(1.7)",
+            },
+            0.1,
+          );
+        }
+
+        // Labels slide in
+        if (labels.length > 0) {
+          tl.to(
+            labels,
+            {
+              x: 0,
+              opacity: 1,
+              duration: 0.5,
+              stagger: 0.1,
+              ease: "power2.out",
+            },
+            0.2,
+          );
+        }
+      });
+
+      console.log(TAG + " Section Headers ✓");
+    }
+
+    // UTILITY: Card 3D Tilt
+    // ═══════════════════════════════════════
+    function initCardTilt(gsap, card, intensity) {
+      intensity = intensity || 8;
+      var inner = card.querySelector(".relative") || card;
+
+      card.addEventListener("mousemove", function (e) {
+        var rect = card.getBoundingClientRect();
+        var x = (e.clientX - rect.left) / rect.width - 0.5;
+        var y = (e.clientY - rect.top) / rect.height - 0.5;
+
+        gsap.to(card, {
+          rotateY: x * intensity,
+          rotateX: -y * intensity,
+          duration: 0.4,
+          ease: "power2.out",
+          transformPerspective: 800,
+        });
+      });
+
+      card.addEventListener("mouseleave", function () {
+        gsap.to(card, {
+          rotateY: 0,
+          rotateX: 0,
+          duration: 0.6,
+          ease: "elastic.out(1, 0.6)",
+        });
+      });
+    }
+
+    // ═══════════════════════════════════════
+    // MAIN INIT
+    // ═══════════════════════════════════════
+    function initAll(gsap, ST) {
+      if (initialized) return;
+      initialized = true;
+
+      console.log(TAG + " 🚀 Initializing all animations...");
+
+      initHero(gsap, ST);
+      initAbout(gsap, ST);
+      initServices(gsap, ST);
+      initWorks(gsap, ST);
+      initProjectCards(gsap, ST);
+      initSectionHeaders(gsap, ST);
+      initGlobalEffects(gsap, ST);
+
+      setTimeout(function () {
+        ST.refresh();
+        console.log(TAG + " ScrollTrigger refreshed");
+      }, 200);
+
+      console.log(
+        "%c" + TAG + " ✅ All animations initialized",
+        "color: #00ff00; font-weight: bold",
+      );
+    }
+
+    // ═══════════════════════════════════════
+    // HERO SECTION
+    // ═══════════════════════════════════════
+    function initHero(gsap, ST) {
+      var tl = gsap.timeline({ delay: 0.1 });
+
+      // Letters — dramatic skew entrance
+      var letters = document.querySelectorAll(".hero-letter");
+      if (letters.length > 0) {
+        tl.to(
+          letters,
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+            stagger: { each: 0.04, from: "start" },
+            ease: "power4.out",
+          },
+          0,
+        );
+
+        // Advanced letter hover: lift + color flash + shake
+        letters.forEach(function (letter) {
+          var originalColor = getComputedStyle(letter).color;
+
+          letter.addEventListener("mouseenter", function () {
+            gsap.killTweensOf(letter);
+            gsap.to(letter, {
+              y: -15,
+              scale: 1.1,
+              color: "hsl(0 58% 47%)",
+              duration: 0.25,
+              ease: "power3.out",
+            });
+          });
+
+          letter.addEventListener("mouseleave", function () {
+            gsap.to(letter, {
+              y: 0,
+              scale: 1,
+              color: originalColor,
+              duration: 0.5,
+              ease: "elastic.out(1, 0.3)",
+            });
+          });
+        });
+      }
+
+      // Shadow letters (if they exist)
+      var shadowLetters = document.querySelectorAll(".hero-letter-shadow");
+      if (shadowLetters.length > 0) {
+        tl.to(
+          shadowLetters,
+          {
+            y: 0,
+            opacity: 0.15,
+            duration: 1,
+            stagger: { each: 0.04, from: "start" },
+            ease: "power4.out",
+          },
+          0.05,
+        );
+      }
+
+      // Label — clip reveal
+      var heroLabel = document.getElementById("hero-label");
+      if (heroLabel) {
+        tl.to(
+          heroLabel,
+          { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" },
+          0.5,
+        );
+      }
+
+      // Line — draws from left
+      var heroLine = document.getElementById("hero-line");
+      if (heroLine) {
+        tl.to(heroLine, { scaleX: 1, duration: 1, ease: "power3.inOut" }, 0.6);
+      }
+      var heroLineGlow = document.getElementById("hero-line-glow");
+      if (heroLineGlow) {
+        tl.to(
+          heroLineGlow,
+          { scaleX: 1, duration: 1, ease: "power3.inOut" },
+          0.7,
+        );
+      }
+
+      // Scroll indicator
+      var heroScroll = document.getElementById("hero-scroll");
+      if (heroScroll) {
+        tl.to(
+          heroScroll,
+          { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" },
+          0.9,
+        );
+        // Floating loop
+        gsap.to(heroScroll, {
+          y: 8,
+          duration: 1.5,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+          delay: 2,
+        });
+      }
+
+      // Meta
+      var heroMeta = document.getElementById("hero-meta");
+      if (heroMeta) {
+        tl.to(
+          heroMeta,
+          { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" },
+          1,
+        );
+      }
+
+      // Hero background parallax on scroll
+      var heroBg = document.getElementById("hero-bg");
+      if (heroBg) {
+        gsap.to(heroBg, {
+          y: 200,
+          scale: 1.1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: "#hero",
+            start: "top top",
+            end: "bottom top",
+            scrub: 1,
+          },
+        });
+      }
+
+      console.log(TAG + " Hero ✓");
+    }
+
+    // ═══════════════════════════════════════
+    // ABOUT SECTION
+    // ═══════════════════════════════════════
+    function initAbout(gsap, ST) {
+      // Section number — counter from 00
+      var sectionNum = document.querySelector(".about-section-num");
+      if (sectionNum) {
+        gsap.to(sectionNum, {
+          opacity: 1,
+          duration: 0.5,
+          scrollTrigger: { trigger: sectionNum, start: "top 90%" },
+        });
+      }
+
+      // Label
+      var aboutLabel = document.querySelector(".about-label-wrapper");
+      if (aboutLabel) {
+        gsap.to(aboutLabel, {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          scrollTrigger: { trigger: aboutLabel, start: "top 85%" },
+        });
+      }
+
+      // Title letters — massive skew slam
+      var aboutLetters = document.querySelectorAll(".about-letter");
+      if (aboutLetters.length > 0) {
+        gsap.to(aboutLetters, {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.04,
+          ease: "power4.out",
+          scrollTrigger: {
+            trigger: ".about-title",
+            start: "top 80%",
+            toggleActions: "play none none reverse",
+          },
+        });
+      }
+
+      // Description
+      var aboutDesc = document.querySelector(".about-desc");
+      if (aboutDesc) {
+        gsap.to(aboutDesc, {
+          y: 0,
+          opacity: 1,
+          duration: 0.7,
+          scrollTrigger: { trigger: aboutDesc, start: "top 85%" },
+        });
+      }
+
+      // Meta + CTA
+      var aboutMeta = document.querySelector(".about-meta");
+      if (aboutMeta) {
+        gsap.to(aboutMeta, {
+          opacity: 1,
+          duration: 0.5,
+          scrollTrigger: { trigger: aboutMeta, start: "top 90%" },
+        });
+      }
+
+      var aboutCta = document.querySelector(".about-cta-link");
+      if (aboutCta) {
+        gsap.to(aboutCta, {
+          y: 0,
+          opacity: 1,
+          duration: 0.5,
+          scrollTrigger: { trigger: aboutCta, start: "top 90%" },
+        });
+        initMagnetic(gsap, aboutCta, 0.2);
+      }
+
+      // Stats — stagger + counter animation
+      var aboutStats = document.querySelectorAll(".about-stat");
+      if (aboutStats.length > 0) {
+        aboutStats.forEach(function (stat, i) {
+          gsap.to(stat, {
+            y: 0,
+            opacity: 1,
+            duration: 0.7,
+            delay: i * 0.12,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: stat,
+              start: "top 88%",
+              toggleActions: "play none none reverse",
+            },
+          });
+        });
+
+        // Counter animation
+        var statNumbers = document.querySelectorAll(".about-stat-number");
+        statNumbers.forEach(function (stat) {
+          var finalText = stat.textContent || "0";
+          var hasPlus = finalText.indexOf("+") !== -1;
+          var numVal = parseInt(finalText.replace(/\D/g, ""));
+
+          if (!isNaN(numVal) && numVal > 0) {
+            var counter = { v: 0 };
+            gsap.to(counter, {
+              v: numVal,
+              duration: 2,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: stat,
+                start: "top 85%",
+                toggleActions: "play none none none",
+              },
+              onUpdate: function () {
+                stat.textContent = Math.round(counter.v) + (hasPlus ? "+" : "");
+              },
+            });
+          }
+        });
+
+        // Stat card hover — lift + border glow
+        aboutStats.forEach(function (stat) {
+          stat.addEventListener("mouseenter", function () {
+            gsap.to(stat, {
+              y: -5,
+              scale: 1.02,
+              boxShadow: "0 8px 30px rgba(183, 58, 58, 0.15)",
+              duration: 0.3,
+              ease: "power2.out",
+            });
+          });
+          stat.addEventListener("mouseleave", function () {
+            gsap.to(stat, {
+              y: 0,
+              scale: 1,
+              boxShadow: "none",
+              duration: 0.4,
+              ease: "power2.out",
+            });
+          });
+        });
+      }
+
+      // Content sections
+      var aboutSections = document.querySelectorAll(".about-section");
+      if (aboutSections.length > 0) {
+        aboutSections.forEach(function (section, i) {
+          gsap.to(section, {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            delay: i * 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: section,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          });
+        });
+      }
+
+      // Tech items — stagger + scramble on hover
+      var techItems = document.querySelectorAll(".tech-item");
+      if (techItems.length > 0) {
+        gsap.to(techItems, {
+          x: 0,
+          opacity: 1,
+          duration: 0.5,
+          stagger: 0.05,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: techItems[0],
+            start: "top 90%",
+            toggleActions: "play none none reverse",
+          },
+        });
+
+        // Hover: slide + text scramble
+        techItems.forEach(function (item) {
+          var textEl = item.querySelector("span") || item;
+          var originalText = textEl.textContent || "";
+
+          item.addEventListener("mouseenter", function () {
+            gsap.to(item, {
+              x: 12,
+              paddingLeft: 16,
+              duration: 0.3,
+              ease: "power2.out",
+            });
+            textScramble(textEl, originalText, { duration: 400 });
+          });
+          item.addEventListener("mouseleave", function () {
+            gsap.to(item, {
+              x: 0,
+              paddingLeft: 0,
+              duration: 0.3,
+              ease: "power2.out",
+            });
+          });
+        });
+      }
+
+      console.log(TAG + " About ✓");
+    }
+
+    // ═══════════════════════════════════════
+    // SERVICES SECTION
+    // ═══════════════════════════════════════
+    function initServices(gsap, ST) {
+      // Section number
+      var sectionNum = document.querySelector(".services-section-num");
+      if (sectionNum) {
+        gsap.to(sectionNum, {
+          opacity: 1,
+          duration: 0.5,
+          scrollTrigger: { trigger: sectionNum, start: "top 90%" },
+        });
+      }
+
+      // Header elements
+      var headerEls = [
+        ".services-label-wrapper",
+        ".services-hero-title",
+        ".services-hero-text",
+        ".services-meta",
+        ".services-cta-link",
+      ];
+      headerEls.forEach(function (sel, i) {
+        var el = document.querySelector(sel);
+        if (el) {
+          gsap.to(el, {
+            y: 0,
+            opacity: 1,
+            duration: 0.6,
+            ease: "power3.out",
+            scrollTrigger: { trigger: el, start: "top 88%" },
+          });
+        }
+      });
+
+      // Service rows — dramatic individual timelines
+      var serviceRows = document.querySelectorAll(".service-row");
+      serviceRows.forEach(function (row, index) {
+        var number = row.querySelector(".service-number");
+        var title = row.querySelector(".service-title");
+        var desc = row.querySelector(".service-desc");
+        var sweepBg = row.querySelector(".service-sweep") || null;
+
+        // Scroll entrance
+        var tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: row,
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          },
+        });
+
+        tl.to(row, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0);
+        if (number)
+          tl.fromTo(
+            number,
+            { opacity: 0, x: -15 },
+            { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" },
+            0.08,
+          );
+        if (title)
+          tl.fromTo(
+            title,
+            { opacity: 0, y: 15, skewY: 2 },
+            { opacity: 1, y: 0, skewY: 0, duration: 0.6, ease: "power3.out" },
+            0.05 + index * 0.02,
+          );
+        if (desc)
+          tl.fromTo(desc, { opacity: 0 }, { opacity: 1, duration: 0.5 }, 0.15);
+
+        // Hover: title slides + number scales + accent red flash
+        row.addEventListener("mouseenter", function () {
+          if (title) {
+            gsap.to(title, { x: 15, duration: 0.35, ease: "power2.out" });
+            // Text scramble on title
+            var titleText = title.textContent || "";
+            textScramble(title, titleText, { duration: 300 });
+          }
+          if (number)
+            gsap.to(number, {
+              scale: 1.3,
+              color: "hsl(0 58% 47%)",
+              duration: 0.3,
+              ease: "back.out(1.7)",
+            });
+        });
+
+        row.addEventListener("mouseleave", function () {
+          if (title)
+            gsap.to(title, { x: 0, duration: 0.3, ease: "power2.out" });
+          if (number)
+            gsap.to(number, { scale: 1, clearProps: "color", duration: 0.3 });
+        });
+      });
+
+      // Process cards — stagger with tilt
+      var processCards = document.querySelectorAll(".process-card");
+      if (processCards.length > 0) {
+        processCards.forEach(function (card, i) {
+          gsap.to(card, {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            duration: 0.7,
+            delay: i * 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          });
+
+          // Hover: lift + shadow + number pulse
+          var num = card.querySelector(".process-number");
+          card.addEventListener("mouseenter", function () {
+            gsap.to(card, {
+              y: -8,
+              scale: 1.02,
+              boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
+              duration: 0.3,
+              ease: "power2.out",
+            });
+            if (num)
+              gsap.to(num, {
+                scale: 1.2,
+                color: "hsl(0 58% 47%)",
+                duration: 0.3,
+                ease: "back.out(1.7)",
+              });
+          });
+          card.addEventListener("mouseleave", function () {
+            gsap.to(card, {
+              y: 0,
+              scale: 1,
+              boxShadow: "none",
+              duration: 0.4,
+              ease: "power2.out",
+            });
+            if (num)
+              gsap.to(num, { scale: 1, clearProps: "color", duration: 0.3 });
+          });
+        });
+      }
+
+      console.log(TAG + " Services ✓");
+    }
+
+    // ═══════════════════════════════════════
+    // WORKS SECTION HEADER
+    // ═══════════════════════════════════════
+    function initWorks(gsap, ST) {
+      // Section num
+      var sectionNum = document.querySelector(".works-section-num");
+      if (sectionNum) {
+        gsap.to(sectionNum, {
+          opacity: 1,
+          duration: 0.5,
+          scrollTrigger: { trigger: sectionNum, start: "top 90%" },
+        });
+      }
+
+      // Label
+      var worksLabel = document.querySelector(".works-label-wrapper");
+      if (worksLabel) {
+        gsap.to(worksLabel, {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          scrollTrigger: { trigger: worksLabel, start: "top 85%" },
+        });
+      }
+
+      // Big title — skew slam
+      var worksTitle = document.querySelector(".works-title");
+      if (worksTitle) {
+        gsap.to(worksTitle, {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          ease: "power4.out",
+          scrollTrigger: { trigger: worksTitle, start: "top 82%" },
+        });
+      }
+
+      // Meta
+      var worksMeta = document.querySelector(".works-meta");
+      if (worksMeta) {
+        gsap.to(worksMeta, {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          scrollTrigger: { trigger: worksMeta, start: "top 88%" },
+        });
+      }
+
+      // Footer
+      var worksFooter = document.querySelector(".works-footer");
+      if (worksFooter) {
+        gsap.to(worksFooter, {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: worksFooter,
+            start: "top 90%",
+            toggleActions: "play none none reverse",
+          },
+        });
+      }
+
+      console.log(TAG + " Works ✓");
+    }
+
+    // ═══════════════════════════════════════
+    // PROJECT CARDS — Advanced Hover
+    // ═══════════════════════════════════════
+    function initProjectCards(gsap, ST) {
+      var cards = document.querySelectorAll("[data-project-card]");
+      if (cards.length === 0) return;
+
+      cards.forEach(function (card, index) {
+        var title = card.querySelector(".card-title");
+        var indexNum = card.querySelector(".card-index");
+        var arrow = card.querySelector(".view-arrow");
+        var categoryEl = card.querySelector(".font-mono"); // category text
+        var bottomLine = card.querySelector(".absolute.bottom-0"); // accent bottom line
+
+        // Scroll entrance — stagger with skew
+        gsap.to(card, {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 88%",
+            toggleActions: "play none none none",
+          },
+        });
+
+        // 3D Tilt on hover
+        initCardTilt(gsap, card, 4);
+
+        // Hover IN
+        card.addEventListener("mouseenter", function () {
+          // Title slides right + text scramble
+          if (title) {
+            gsap.to(title, { x: 20, duration: 0.4, ease: "power3.out" });
+            var titleText = title.textContent || "";
+            textScramble(title, titleText, { duration: 400 });
+          }
+
+          // Index scales up + turns red
+          if (indexNum) {
+            gsap.to(indexNum, {
+              scale: 1.5,
+              color: "hsl(0 58% 47%)",
+              duration: 0.3,
+              ease: "back.out(1.7)",
+            });
+          }
+
+          // Arrow rotates + scales
+          if (arrow) {
+            gsap.to(arrow, {
+              rotation: 45,
+              scale: 1.2,
+              duration: 0.35,
+              ease: "back.out(1.7)",
+            });
+          }
+        });
+
+        // Hover OUT
+        card.addEventListener("mouseleave", function () {
+          if (title)
+            gsap.to(title, { x: 0, duration: 0.4, ease: "power2.out" });
+          if (indexNum)
+            gsap.to(indexNum, { scale: 1, clearProps: "color", duration: 0.3 });
+          if (arrow)
+            gsap.to(arrow, {
+              rotation: 0,
+              scale: 1,
+              duration: 0.3,
+              ease: "power2.out",
+            });
+        });
+      });
+
+      console.log(TAG + " Project Cards ✓");
+    }
+
+    // ═══════════════════════════════════════
+    // GLOBAL EFFECTS (magnetic, text movements)
+    // ═══════════════════════════════════════
+    function initGlobalEffects(gsap, ST) {
+      // ── Magnetic buttons / links ──
+      var magneticEls = document.querySelectorAll(
+        ".view-all-link, .explore-link, .about-cta-link, .services-cta-link, [data-magnetic]",
+      );
+      magneticEls.forEach(function (el) {
+        initMagnetic(gsap, el, 0.25);
+      });
+
+      // ── Nav links hover — text scramble ──
+      var navLinks = document.querySelectorAll(".nav-link");
+      navLinks.forEach(function (link) {
+        var textEl =
+          link.querySelector(".nav-link-text") ||
+          link.querySelector("span") ||
+          link;
+        var originalText = textEl.textContent || "";
+
+        link.addEventListener("mouseenter", function () {
+          textScramble(textEl, originalText, { duration: 300 });
+        });
+      });
+
+      // ── Social links in footer — stagger entrance already handled, add hover scramble ──
+      var socialLinks = document.querySelectorAll(".social-link h3");
+      socialLinks.forEach(function (h3) {
+        var parent = h3.parentElement;
+        var originalText = h3.textContent || "";
+
+        if (parent) {
+          parent.addEventListener("mouseenter", function () {
+            textScramble(h3, originalText, { duration: 350 });
+            gsap.to(h3, {
+              letterSpacing: "0.05em",
+              duration: 0.4,
+              ease: "power2.out",
+            });
+          });
+          parent.addEventListener("mouseleave", function () {
+            gsap.to(h3, {
+              letterSpacing: "",
+              duration: 0.3,
+              ease: "power2.out",
+            });
+          });
+        }
+      });
+
+      // ── Accent lines draw on scroll ──
+      var accentLines = document.querySelectorAll(
+        ".h-1.bg-accent, .h-\\[2px\\].bg-accent",
+      );
+      accentLines.forEach(function (line) {
+        gsap.fromTo(
+          line,
+          { scaleX: 0, transformOrigin: "left center" },
+          {
+            scaleX: 1,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: line,
+              start: "top 92%",
+              toggleActions: "play none none reverse",
+            },
+          },
+        );
+      });
+
+      // ── Smooth reveal for border-b sections ──
+      var dividers = document.querySelectorAll("section > header > .border-b");
+      dividers.forEach(function (div) {
+        gsap.fromTo(
+          div,
+          { opacity: 0, y: 10 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            ease: "power2.out",
+            scrollTrigger: { trigger: div, start: "top 90%" },
+          },
+        );
+      });
+
+      console.log(TAG + " Global Effects ✓");
+    }
+
+    // ═══════════════════════════════════════
+    // TRIGGERS
+    // ═══════════════════════════════════════
+    waitForGSAP(function (gsap, ST) {
+      var started = false;
+
+      window.addEventListener("preloader-complete", function () {
+        if (!started) {
+          started = true;
+          console.log(TAG + " Preloader complete → starting");
+          initAll(gsap, ST);
+        }
+      });
+
+      setTimeout(function () {
+        if (!started) {
+          started = true;
+          console.log(TAG + " Fallback timeout → starting");
+          initAll(gsap, ST);
+        }
+      }, 2500);
+    });
+
+    // Ultimate safety
+    setTimeout(function () {
+      if (!initialized) {
+        console.warn(TAG + " Ultimate fallback — forcing visibility");
+        forceShow();
+      }
+    }, 5000);
+  })();
+</script>
