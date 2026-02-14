@@ -59,7 +59,7 @@ import { siteConfig } from "../../data/site";
             {String(index + 1).padStart(2, "0")}
           </span>
           
-          <h3 class="service-title flex-1 font-display font-black uppercase text-foreground group-hover:text-accent transition-colors duration-300 leading-[0.95]" style="font-size: clamp(1.25rem, 3.5vw, 2.5rem);">
+          <h3 class="service-title flex-1 font-display font-black uppercase text-white group-hover:text-accent transition-colors duration-300 leading-[0.95]" style="font-size: clamp(1.25rem, 3.5vw, 2.5rem);">
             {service.title}
           </h3>
           
@@ -94,7 +94,9 @@ import { siteConfig } from "../../data/site";
 </section>
 
 <style>
-  /* Animaciones manejadas por GSAP */
+  #services .services-list .service-row .service-title {
+    color: white;
+  }
 </style>
 
 <script>

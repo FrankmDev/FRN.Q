@@ -156,6 +156,19 @@
             if (window.gsap) gsap.to(title, { x: 0, duration: 0.3, ease: 'power2.out' });
           });
         });
+        
+        // Project Card titles con scramble
+        var projectCards = document.querySelectorAll('[data-project-card]');
+        projectCards.forEach(function(card) {
+          var title = card.querySelector('.card-title');
+          if (!title) return;
+          
+          var originalTitle = title.textContent;
+          
+          card.addEventListener('mouseenter', function() {
+            textScramble(title, originalTitle);
+          });
+        });
       }
       
       console.log('[GSAPFinal] Animations initialized');
